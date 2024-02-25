@@ -1,0 +1,6 @@
+@Store_IBoard_HostAddress = http://localhost:5125
+
+GET {{Store_IBoard_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
