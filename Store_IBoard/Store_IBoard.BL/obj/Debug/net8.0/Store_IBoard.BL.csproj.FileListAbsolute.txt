@@ -1,0 +1,16 @@
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\bin\Debug\net8.0\Store_IBoard.BL.deps.json
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\bin\Debug\net8.0\Store_IBoard.BL.dll
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\bin\Debug\net8.0\Store_IBoard.BL.pdb
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\bin\Debug\net8.0\Store_IBoard.DL.dll
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\bin\Debug\net8.0\Store_IBoard.DL.pdb
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\obj\Debug\net8.0\Store_IBoard.BL.csproj.AssemblyReference.cache
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\obj\Debug\net8.0\Store_IBoard.BL.GeneratedMSBuildEditorConfig.editorconfig
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\obj\Debug\net8.0\Store_IBoard.BL.AssemblyInfoInputs.cache
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\obj\Debug\net8.0\Store_IBoard.BL.AssemblyInfo.cs
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\obj\Debug\net8.0\Store_IBoard.BL.csproj.CoreCompileInputs.cache
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\obj\Debug\net8.0\Store_IBoard.BL.sourcelink.json
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\obj\Debug\net8.0\Store_IB.AD633F8A.Up2Date
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\obj\Debug\net8.0\Store_IBoard.BL.dll
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\obj\Debug\net8.0\refint\Store_IBoard.BL.dll
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\obj\Debug\net8.0\Store_IBoard.BL.pdb
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.BL\obj\Debug\net8.0\ref\Store_IBoard.BL.dll

@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\Store_IBoard.BL\Store_IBoard.BL.csproj" />
   </ItemGroup>
 
 </Project>
