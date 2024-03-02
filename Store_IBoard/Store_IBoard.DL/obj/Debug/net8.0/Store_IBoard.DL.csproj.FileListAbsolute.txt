@@ -10,3 +10,6 @@ E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.DL\obj\Debug\net8.0\Sto
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.DL\obj\Debug\net8.0\refint\Store_IBoard.DL.dll
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.DL\obj\Debug\net8.0\Store_IBoard.DL.pdb
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.DL\obj\Debug\net8.0\ref\Store_IBoard.DL.dll
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.DL\bin\Debug\net8.0\Store_IBoard.DL.runtimeconfig.json
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.DL\obj\Debug\net8.0\Store_IBoard.DL.csproj.AssemblyReference.cache
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard.DL\obj\Debug\net8.0\Store_IBoard.DL.genruntimeconfig.cache
