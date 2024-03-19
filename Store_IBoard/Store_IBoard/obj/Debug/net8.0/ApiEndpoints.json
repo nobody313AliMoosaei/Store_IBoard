@@ -1,34 +1,12 @@
 [
   {
-    "ContainingType": "Store_IBoard.Controllers.TestController",
+    "ContainingType": "Store_IBoard.Controllers.HomeController",
     "Method": "Get",
-    "RelativePath": "api/Test/Get",
-    "HttpMethod": "GET",
+    "RelativePath": "api/Home/Get",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Key",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Store_IBoard.Controllers.TestController",
-    "Method": "SetInRedis",
-    "RelativePath": "api/Test/SetInRedis",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "Value",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": []
   }
 ]

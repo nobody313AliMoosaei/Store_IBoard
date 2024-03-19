@@ -57,6 +57,10 @@
             "Microsoft.Extensions.Caching.StackExchangeRedis": {
               "target": "Package",
               "version": "[8.0.2, )"
+            },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[2.24.0, )"
             }
           },
           "imports": [
@@ -191,6 +195,9 @@
             "projectReferences": {
               "E:\\Project\\GitHub\\Store_IBoard\\Store_IBoard\\Store_IBoard.BL\\Store_IBoard.BL.csproj": {
                 "projectPath": "E:\\Project\\GitHub\\Store_IBoard\\Store_IBoard\\Store_IBoard.BL\\Store_IBoard.BL.csproj"
+              },
+              "E:\\Project\\GitHub\\Store_IBoard\\Store_IBoard\\Store_IBoard.DL\\Store_IBoard.DL.csproj": {
+                "projectPath": "E:\\Project\\GitHub\\Store_IBoard\\Store_IBoard\\Store_IBoard.DL\\Store_IBoard.DL.csproj"
               }
             }
           }
@@ -210,6 +217,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[8.0.3, )"
+            },
             "Microsoft.EntityFrameworkCore.Design": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
