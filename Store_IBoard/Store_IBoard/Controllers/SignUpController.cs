@@ -17,7 +17,7 @@ namespace Store_IBoard.Controllers
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> Login([FromBody] LoginDTO LoginModel)
-        {
+        {            
             var Result = await _signUpService.Login(LoginModel);
             if (Result.Error.IsValid)
                 return Ok(Result);

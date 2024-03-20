@@ -1,12 +1,34 @@
 [
   {
-    "ContainingType": "Store_IBoard.Controllers.HomeController",
-    "Method": "Get",
-    "RelativePath": "api/Home/Get",
+    "ContainingType": "Store_IBoard.Controllers.SignUpController",
+    "Method": "Login",
+    "RelativePath": "api/SignUp/Login",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "LoginModel",
+        "Type": "Store_IBoard.BL.DTO.INPUT.SignUp.LoginDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.SignUpController",
+    "Method": "Register",
+    "RelativePath": "api/SignUp/Register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "NewUserModel",
+        "Type": "Store_IBoard.BL.DTO.INPUT.SignUp.SignUpDTO",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   }
 ]

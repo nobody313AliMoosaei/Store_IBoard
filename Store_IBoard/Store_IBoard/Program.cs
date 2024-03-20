@@ -23,6 +23,7 @@ builder.Services.AddSession(option =>
 {
     option.IdleTimeout = TimeSpan.FromMinutes(5);
 });
+
 #endregion
 
 #region Redis Configuration
@@ -94,7 +95,7 @@ builder.Services.AddAuthentication(t =>
     t.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(option =>
 {
-    option.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+    option.TokenValidationParameters = new TokenValidationParameters()
     {
         ValidIssuer = builder.Configuration["JWTConfiguration:issuer"],
         ValidAudience = builder.Configuration["JWTConfiguration:audience"],
@@ -117,6 +118,8 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllers();
 
