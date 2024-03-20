@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Store_IBoard.BL.DTO.INPUT.SignUp;
 using Store_IBoard.BL.DTO.OUTPUT.SignUp;
+using Store_IBoard.BL.Services.Eamil;
 using Store_IBoard.BL.Services.JWT;
 using Store_IBoard.BL.Services.Public;
 using Store_IBoard.DL.ApplicationDbContext;
@@ -20,24 +21,60 @@ namespace Store_IBoard.BL.Services.SignUp
         private ApplicationDbContext _context;
         private IJWTTokenManager _jwtTokenManager;
         private UserManager<Users> _userManager;
+        private IEmailService _emailService;
         public SignUpService(ApplicationDbContext context,
             IJWTTokenManager jwtmanager
-            ,UserManager<Users> usermanager)
+            , UserManager<Users> usermanager,
+            IEmailService emailservice)
         {
             _context = context;
             _jwtTokenManager = jwtmanager;
             _userManager = usermanager;
+            _emailService = emailservice;
         }
         public Task<ErrorsVM> ChangePassword(ChangePasswordModelDTO NewPassword)
         {
             // Verify SMS And ChangePassword
+            // --
+
+            // 
             throw new NotImplementedException();
         }
 
-        public Task<ErrorsVM> ForgetPassword(string? UserName)
+        public async Task<ErrorsVM> ForgetPassword(string? UserName)
         {
-            // Send SMS
-            throw new NotImplementedException();
+            var res = new ErrorsVM();
+            try
+            {
+                if (UserName.IsNullOrEmpty())
+                    res.Message = "نام کاربری وارد نشده است";
+                else
+                {
+                    // Send SMS
+                    //--
+
+
+                    // Send Email
+
+                    var user = await _context.Users.Where(e => e.UserName == UserName
+                    || e.PhoneNumber == UserName || e.Email == UserName || e.NationalCode == UserName)
+                        .FirstOrDefaultAsync();
+                    if (user is null)
+                        res.Message = "کاربری با این مشخصات وجود ندارد";
+                    else
+                    {
+                        var random = new Random();
+                        int key = random.Next(100000, 999999);
+                        string body = $"Code = {key}";
+                        Task.Factory.StartNew(()=>_emailService.SendYahooMailAsync(user.Email, body));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return res;
         }
 
         public async Task<LoginModelDTO> Login(LoginDTO loginUser)
@@ -57,7 +94,7 @@ namespace Store_IBoard.BL.Services.SignUp
                         res.Error.Message = "کاربری یافت نشد";
                     else
                     {
-                        if(!await _userManager.CheckPasswordAsync(user, loginUser.Password))
+                        if (!await _userManager.CheckPasswordAsync(user, loginUser.Password))
                             res.Error.Message = "نام کاربری معتبر نیست";
                         else
                         {
@@ -73,7 +110,7 @@ namespace Store_IBoard.BL.Services.SignUp
             {
                 res.Error.Message = "خطا در اجرای برنامه";
                 res.Error.LstErrors.Add(ex.Message);
-                if(ex.InnerException is not null)
+                if (ex.InnerException is not null)
                     res.Error.LstErrors.Add(ex.InnerException.Message);
             }
             return res;
@@ -106,7 +143,7 @@ namespace Store_IBoard.BL.Services.SignUp
                             Email = NewUser.Email,
                             IsActive = true
                         };
-                        if((await _userManager.CreateAsync(user, NewUser.Password)).Succeeded)
+                        if ((await _userManager.CreateAsync(user, NewUser.Password)).Succeeded)
                         {
                             // Add Defualt Role
                             if ((await _userManager.AddToRoleAsync(user, UserRoles.DefulatUser.ToString())).Succeeded)
@@ -121,7 +158,8 @@ namespace Store_IBoard.BL.Services.SignUp
                             res.Message = "این کاربر نمی تواند در سیستم ثبت نام کند";
                     }
                 }
-            }catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 res.Message = "خطا در اجرای برنامه";
                 res.LstErrors.Add(ex.Message);

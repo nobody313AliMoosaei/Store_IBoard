@@ -14,7 +14,6 @@ E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\obj\Debug\net8.0\Store_
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\obj\Debug\net8.0\Store_IBoard.AssemblyInfoInputs.cache
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\obj\Debug\net8.0\Store_IBoard.AssemblyInfo.cs
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\obj\Debug\net8.0\Store_IBoard.csproj.CoreCompileInputs.cache
-E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\obj\Debug\net8.0\Store_IBoard.MvcApplicationPartsAssemblyInfo.cs
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\obj\Debug\net8.0\Store_IBoard.MvcApplicationPartsAssemblyInfo.cache
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\obj\Debug\net8.0\Store_IBoard.sourcelink.json
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\obj\Debug\net8.0\staticwebassets.build.json
@@ -162,3 +161,4 @@ E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\bin\Debug\net8.0\runtim
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\bin\Debug\net8.0\runtimes\osx\native\libmongocrypt.dylib
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\bin\Debug\net8.0\runtimes\win\native\mongocrypt.dll
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\obj\Debug\net8.0\Store_IBoard.MvcApplicationPartsAssemblyInfo.cs

@@ -5,13 +5,13 @@ using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Store_IBoard.DL.ApplicationDbContext;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
@@ -39,9 +39,9 @@ if (Convert.ToBoolean(builder.Configuration["RedisConfiguration:RedisEnable"]))
 #endregion
 
 #region Sql server Configuration
-builder.Services.AddDbContext<Store_IBoard.DL.ApplicationDbContext.ApplicationDbContext>(option =>
+builder.Services.AddDbContext<ApplicationDbContext>(option =>
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("SQLConnection"));
+    option.UseSqlServer(builder.Configuration["StringConnection:SQLConnection"]);
 });
 #endregion
 
@@ -52,7 +52,7 @@ builder.Services.AddDbContext<Store_IBoard.DL.ApplicationDbContext.ApplicationDb
 #region UserManagement
 builder.Services
     .AddIdentity<Store_IBoard.DL.Entities.Users, Store_IBoard.DL.Entities.Roles>()
-    .AddEntityFrameworkStores<Store_IBoard.DL.ApplicationDbContext.ApplicationDbContext>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders()
     .AddRoles<Store_IBoard.DL.Entities.Roles>();
 
@@ -82,6 +82,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddTransient<Store_IBoard.BL.Services.JWT.IJWTTokenManager, Store_IBoard.BL.Services.JWT.JWTTokenManager>();
 builder.Services.AddTransient<Store_IBoard.BL.Services.SignUp.ISignUpService, Store_IBoard.BL.Services.SignUp.SignUpService>();
 builder.Services.AddSingleton<Store_IBoard.BL.Services.Eamil.IEmailService, Store_IBoard.BL.Services.Eamil.EmailService>();
+builder.Services.AddSingleton<Store_IBoard.BL.Services.Session.ISessionService, Store_IBoard.BL.Services.Session.SessionService>();
 
 #endregion
 
