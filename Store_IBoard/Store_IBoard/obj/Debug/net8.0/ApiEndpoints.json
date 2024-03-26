@@ -1,6 +1,16 @@
 [
   {
     "ContainingType": "Store_IBoard.Controllers.SignUpController",
+    "Method": "GetRepo",
+    "RelativePath": "api/SignUp/GetRepo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.SignUpController",
     "Method": "Login",
     "RelativePath": "api/SignUp/Login",
     "HttpMethod": "POST",

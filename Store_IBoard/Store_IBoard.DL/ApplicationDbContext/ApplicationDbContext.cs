@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Store_IBoard.DL.Entities;
+using Store_IBoard.DL.ToolsBLU;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,8 @@ namespace Store_IBoard.DL.ApplicationDbContext
         public virtual DbSet<GoodsColor> GoodsColors { get; set; }
 
         public virtual DbSet<GroupGood> GroupGoods { get; set; }
-
+        
+        public virtual DbSet<SendEmailSMSModel> SendEmailSMSModels { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -40,6 +42,7 @@ namespace Store_IBoard.DL.ApplicationDbContext
             {
                 entity.HasNoKey();
             });
+            
             builder.Entity<IdentityUserToken<long>>(entity =>
             {
                 entity.HasNoKey();
@@ -100,8 +103,49 @@ namespace Store_IBoard.DL.ApplicationDbContext
                     .HasConstraintName("FK__GroupGood__Categ__38996AB5");
             });
 
+            builder.Entity<SendEmailSMSModel>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e=>e.Id).HasMaxLength(40).HasColumnType("VARCHAR");
+                entity.Property(e => e.Email).HasMaxLength(450);
+                entity.Property(e => e.PhoneNumber).HasMaxLength(13);
+                entity.HasIndex(e => e.Email, "IX_SendEmailSMSModel_Email");
+                entity.HasIndex(e => e.PhoneNumber, "IX_SendEmailSMSModel_PhoneNumber");
+            });
 
-
+            #region Set Data For Roles
+            builder.Entity<Roles>().HasData(new List<Roles>
+            {
+                new Roles
+                {
+                    Id = 1,
+                    Name = DL.ToolsBLU.UserRoles.Administrator.ToString(),
+                    NormalizedName = DL.ToolsBLU.UserRoles.Administrator.ToString().ToUpper(),
+                    PersianName = "ادمین"
+                },
+                new Roles
+                {
+                    Id = 2,
+                    Name = DL.ToolsBLU.UserRoles.DefulatUser.ToString(),
+                    NormalizedName = DL.ToolsBLU.UserRoles.DefulatUser.ToString().ToUpper(),
+                    PersianName = "کاربر عادی"
+                },
+                new Roles
+                {
+                    Id = 3,
+                    Name = DL.ToolsBLU.UserRoles.MiddLevelUser.ToString(),
+                    NormalizedName = DL.ToolsBLU.UserRoles.MiddLevelUser.ToString().ToUpper(),
+                    PersianName = "کاربر سطح دو"
+                },
+                new Roles
+                {
+                    Id = 4,
+                    Name = DL.ToolsBLU.UserRoles.TopLevelUser.ToString(),
+                    NormalizedName = DL.ToolsBLU.UserRoles.TopLevelUser.ToString().ToUpper(),
+                    PersianName = "کاربر سطح سه"
+                },
+            });
+            #endregion
         }
     }
 }

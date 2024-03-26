@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Store_IBoard.DL.ApplicationDbContext;
+using Store_IBoard.DL.UnitOfWork;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -84,6 +85,7 @@ builder.Services.AddTransient<Store_IBoard.BL.Services.JWT.IJWTTokenManager, Sto
 builder.Services.AddTransient<Store_IBoard.BL.Services.SignUp.ISignUpService, Store_IBoard.BL.Services.SignUp.SignUpService>();
 builder.Services.AddSingleton<Store_IBoard.BL.Services.Eamil.IEmailService, Store_IBoard.BL.Services.Eamil.EmailService>();
 builder.Services.AddSingleton<Store_IBoard.BL.Services.Session.ISessionService, Store_IBoard.BL.Services.Session.SessionService>();
+builder.Services.AddTransient(typeof(RepositoryGeneric<>));
 
 #endregion
 

@@ -15,5 +15,6 @@ namespace Store_IBoard.BL.DTO.INPUT.SignUp
         public string? Password { get; set; }
         [Compare(nameof(Password))]
         public string? ConfirmPassword { get; set; }
+        public int Code { get; set; }
     }
 }

@@ -30,5 +30,16 @@ namespace Store_IBoard.DL.ToolsBLU
                 res.LstErrors = new List<string>();
             res.LstErrors.Add(message);
         }
+
+        public static DateTime ToPersianDateTime(this DateTime? Value)
+        {
+            if (Value is null)
+                return DateTime.Now;
+            System.Globalization.PersianCalendar persianCalendar = new System.Globalization.PersianCalendar();
+            
+            return new DateTime(persianCalendar.GetYear(Value.Value), persianCalendar.GetMonth(Value.Value)
+                , persianCalendar.GetDayOfMonth(Value.Value), persianCalendar.GetHour(Value.Value),
+                persianCalendar.GetMinute(Value.Value), persianCalendar.GetSecond(Value.Value));
+        }
     }
 }

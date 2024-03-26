@@ -7,7 +7,7 @@ namespace Store_IBoard.BL.Services.SignUp
     public interface ISignUpService
     {
         Task<LoginModelDTO> Login(LoginDTO loginUser);
-        Task<ErrorsVM> SignUp(SignUpDTO NewUser);
+        Task<ErrorsVM> Register(SignUpDTO NewUser);
         Task<ErrorsVM> ForgetPassword(string? UserName);
         Task<ErrorsVM> ChangePassword(ChangePasswordModelDTO NewPassword);
 
