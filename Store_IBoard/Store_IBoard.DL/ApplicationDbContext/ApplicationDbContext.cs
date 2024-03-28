@@ -12,9 +12,9 @@ using System.Threading.Tasks;
 
 namespace Store_IBoard.DL.ApplicationDbContext
 {
-    public class ApplicationDbContext : IdentityDbContext<Users, Roles, long>
+    public class ApplicationDBContext : IdentityDbContext<Users, Roles, long>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> option)
+        public ApplicationDBContext(DbContextOptions<ApplicationDBContext> option)
             : base(option)
         { }
 
@@ -27,7 +27,7 @@ namespace Store_IBoard.DL.ApplicationDbContext
         public virtual DbSet<GoodsColor> GoodsColors { get; set; }
 
         public virtual DbSet<GroupGood> GroupGoods { get; set; }
-        
+
         public virtual DbSet<SendEmailSMSModel> SendEmailSMSModels { get; set; }
 
 
@@ -35,17 +35,33 @@ namespace Store_IBoard.DL.ApplicationDbContext
         {
             builder.Entity<IdentityUserLogin<long>>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.LoginProvider, e.ProviderKey });
             });
 
             builder.Entity<IdentityUserRole<long>>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.RoleId, e.UserId });
             });
-            
+
             builder.Entity<IdentityUserToken<long>>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => new { e.UserId, e.LoginProvider, e.Name });
+            });
+
+            builder.Entity<Users>(entity =>
+            {
+                entity.HasIndex(e => e.PhoneNumber, "IX_Users_PhoneNumber").IsUnique(true);
+                entity.HasIndex(e => e.UserName, "IX_Users_UserName");
+                entity.HasIndex(e => e.NationalCode, "IX_Users_NationalCode").IsUnique(true);
+
+                entity.Property(e => e.PhoneNumber).HasMaxLength(13);
+                entity.Property(e => e.NormalizePhoneNumber).HasMaxLength(13);
+                entity.Property(e => e.FirstName).HasMaxLength(150);
+                entity.Property(e => e.LastName).HasMaxLength(250);
+                entity.Property(e => e.NationalCode).HasMaxLength(13);
+                entity.Property(e => e.UserName).HasMaxLength(300);
+                entity.Property(e => e.NormalizedUserName).HasMaxLength(300);
+
             });
 
             builder.Entity<BasColor>(entity =>
@@ -106,7 +122,7 @@ namespace Store_IBoard.DL.ApplicationDbContext
             builder.Entity<SendEmailSMSModel>(entity =>
             {
                 entity.HasKey(e => e.Id);
-                entity.Property(e=>e.Id).HasMaxLength(40).HasColumnType("VARCHAR");
+                entity.Property(e => e.Id).HasMaxLength(40).HasColumnType("VARCHAR");
                 entity.Property(e => e.Email).HasMaxLength(450);
                 entity.Property(e => e.PhoneNumber).HasMaxLength(13);
                 entity.HasIndex(e => e.Email, "IX_SendEmailSMSModel_Email");

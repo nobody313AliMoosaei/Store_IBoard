@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Store_IBoard.DL.ApplicationDbContext;
 using Store_IBoard.DL.UnitOfWork;
+using Store_IBoard.BL.ApplicationBusiness.SignUp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,7 +42,7 @@ if (Convert.ToBoolean(builder.Configuration["RedisConfiguration:RedisEnable"]))
 #endregion
 
 #region Sql server Configuration
-builder.Services.AddDbContext<ApplicationDbContext>(option =>
+builder.Services.AddDbContext<ApplicationDBContext>(option =>
 {
     option.UseSqlServer(builder.Configuration["StringConnection:SQLConnection"]);
 });
@@ -54,7 +55,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(option =>
 #region UserManagement
 builder.Services
     .AddIdentity<Store_IBoard.DL.Entities.Users, Store_IBoard.DL.Entities.Roles>()
-    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddEntityFrameworkStores<ApplicationDBContext>()
     .AddDefaultTokenProviders()
     .AddRoles<Store_IBoard.DL.Entities.Roles>();
 
@@ -82,7 +83,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 #region IOC
 
 builder.Services.AddTransient<Store_IBoard.BL.Services.JWT.IJWTTokenManager, Store_IBoard.BL.Services.JWT.JWTTokenManager>();
-builder.Services.AddTransient<Store_IBoard.BL.Services.SignUp.ISignUpService, Store_IBoard.BL.Services.SignUp.SignUpService>();
+builder.Services.AddTransient<ISignUpService, SignUpService>();
 builder.Services.AddSingleton<Store_IBoard.BL.Services.Eamil.IEmailService, Store_IBoard.BL.Services.Eamil.EmailService>();
 builder.Services.AddSingleton<Store_IBoard.BL.Services.Session.ISessionService, Store_IBoard.BL.Services.Session.SessionService>();
 builder.Services.AddTransient(typeof(RepositoryGeneric<>));

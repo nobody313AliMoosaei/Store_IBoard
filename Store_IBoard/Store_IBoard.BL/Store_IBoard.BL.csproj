@@ -17,7 +17,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ApplicationBusiness\" />
     <Folder Include="Tools\" />
   </ItemGroup>
 

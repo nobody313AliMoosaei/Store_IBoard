@@ -16,16 +16,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Store_IBoard.BL.Services.SignUp
+namespace Store_IBoard.BL.ApplicationBusiness.SignUp
 {
     public class SignUpService : ISignUpService
     {
-        private ApplicationDbContext _context;
+        private ApplicationDBContext _context;
         private IJWTTokenManager _jwtTokenManager;
         private UserManager<Users> _userManager;
         private IEmailService _emailService;
         private RepositoryGeneric<SendEmailSMSModel> _sendEmSMRepo;
-        public SignUpService(ApplicationDbContext context,
+        public SignUpService(ApplicationDBContext context,
             IJWTTokenManager jwtmanager,
             UserManager<Users> usermanager,
             IEmailService emailservice,
@@ -38,6 +38,7 @@ namespace Store_IBoard.BL.Services.SignUp
             _sendEmSMRepo = sendEmSMRepo;
 
         }
+
         public async Task<ErrorsVM> ChangePassword(ChangePasswordModelDTO NewPassword)
         {
             var res = new ErrorsVM();
@@ -139,6 +140,82 @@ namespace Store_IBoard.BL.Services.SignUp
             return res;
         }
 
+        public async Task<ErrorsVM> IsAdmin(long UserId)
+        {
+            var res = new ErrorsVM();
+            try
+            {
+                if (UserId > 0)
+                {
+                    var user = await _context.Users.Where(e => e.Id == UserId).FirstOrDefaultAsync();
+                    if (user is null)
+                        res.Message = "کاربر يافت نشد";
+                    else
+                    {
+                        if ((await _userManager.GetRolesAsync(user)).Any(e => e.ToLower() == UserRoles.Administrator.ToString().ToLower()))
+                        {
+                            res.Message = "کاربر داری نقش ادمین می باشد";
+                            res.IsValid = true;
+                        }
+                        else
+                        {
+                            res.Message = "کاربر دارای نقش ادمین نمی باشد";
+                        }
+                    }
+                }
+                else
+                    res.Message = "شناسه کاربر معتبر نمی‌باشد";
+            }
+            catch (Exception ex)
+            {
+                res.Message = "خطا در اجرای برنامه";
+                res.AddError(ex.Message);
+                if (ex.InnerException is not null)
+                    res.AddError(ex.InnerException.Message);
+            }
+            return res;
+        }
+
+        public async Task<ErrorsVM> IsAdmin(string UserName)
+        {
+
+            var res = new ErrorsVM();
+            try
+            {
+                if (!UserName.IsNullOrEmpty())
+                {
+                    var user = await _context.Users
+                        .Where(e => e.UserName == UserName
+                        || e.PhoneNumber == UserName || e.NormalizedUserName == UserName
+                        || e.NormalizePhoneNumber == UserName || e.NationalCode == UserName).FirstOrDefaultAsync();
+                    if (user is null)
+                        res.Message = "کاربر يافت نشد";
+                    else
+                    {
+                        if ((await _userManager.GetRolesAsync(user)).Any(e => e.ToLower() == UserRoles.Administrator.ToString().ToLower()))
+                        {
+                            res.Message = "کاربر داری نقش ادمین می باشد";
+                            res.IsValid = true;
+                        }
+                        else
+                        {
+                            res.Message = "کاربر دارای نقش ادمین نمی باشد";
+                        }
+                    }
+                }
+                else
+                    res.Message = "نام کاربری، کاربر معتبر نمی‌باشد";
+            }
+            catch (Exception ex)
+            {
+                res.Message = "خطا در اجرای برنامه";
+                res.AddError(ex.Message);
+                if (ex.InnerException is not null)
+                    res.AddError(ex.InnerException.Message);
+            }
+            return res;
+        }
+
         public async Task<LoginModelDTO> Login(LoginDTO loginUser)
         {
             var res = new LoginModelDTO();
@@ -185,7 +262,7 @@ namespace Store_IBoard.BL.Services.SignUp
             try
             {
                 if (NewUser is null || NewUser.PhoneNumber.IsNullOrEmpty() || NewUser.NationalCode.IsNullOrEmpty()
-                    || NewUser.FirstName.IsNullOrEmpty() || NewUser.LastName.IsNullOrEmpty() || (NewUser.Password != NewUser.ConfirmPassword))
+                    || NewUser.FirstName.IsNullOrEmpty() || NewUser.LastName.IsNullOrEmpty() || NewUser.Password != NewUser.ConfirmPassword)
                     res.Message = "اطلاعات ارسالی ناقص است";
                 else
                 {
@@ -195,12 +272,18 @@ namespace Store_IBoard.BL.Services.SignUp
                         res.Message = "کاربری با این مشخصات در سیستم ثبت شده است";
                     else
                     {
+                        string Normalize_PhoneNumber = string.Empty;
+                        if (NewUser.PhoneNumber.StartsWith("+98"))
+                            Normalize_PhoneNumber = NewUser.PhoneNumber.Replace("+98", "0");
+                        //else if (NewUser.PhoneNumber.StartsWith("98"))
+                        //    Normalize_PhoneNumber = "0"+NewUser.PhoneNumber.Substring(1);
                         var user = new Users
                         {
                             FirstName = NewUser.FirstName,
                             LastName = NewUser.LastName,
                             PhoneNumber = NewUser.PhoneNumber,
-                            UserName = NewUser.PhoneNumber,
+                            UserName = Normalize_PhoneNumber,
+
                             NationalCode = NewUser.NationalCode,
                             UserStatus = UserStatus.Accept,
                             Email = NewUser.Email,
@@ -231,5 +314,7 @@ namespace Store_IBoard.BL.Services.SignUp
             }
             return res;
         }
+
+
     }
 }

@@ -20,4 +20,11 @@ namespace Store_IBoard.DL.ToolsBLU
         MiddLevelUser = 3,
         TopLevelUser = 4
     }
+    public enum AccessLevel
+    {
+        None = 0,
+        Level1,
+        Level2,
+        Level3
+    }
 }

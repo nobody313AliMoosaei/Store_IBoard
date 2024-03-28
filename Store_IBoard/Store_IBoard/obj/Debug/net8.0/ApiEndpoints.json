@@ -1,12 +1,18 @@
 [
   {
     "ContainingType": "Store_IBoard.Controllers.SignUpController",
-    "Method": "GetRepo",
-    "RelativePath": "api/SignUp/GetRepo",
-    "HttpMethod": "GET",
+    "Method": "ForgetPassword",
+    "RelativePath": "api/SignUp/ForgetPassword",
+    "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "UserName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -36,6 +42,22 @@
       {
         "Name": "NewUserModel",
         "Type": "Store_IBoard.BL.DTO.INPUT.SignUp.SignUpDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.SignUpController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/SignUp/ResetPassword",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Date",
+        "Type": "Store_IBoard.BL.DTO.INPUT.SignUp.ChangePasswordModelDTO",
         "IsRequired": true
       }
     ],

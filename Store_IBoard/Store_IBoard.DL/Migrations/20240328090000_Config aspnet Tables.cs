@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Store_IBoard.DL.Migrations
 {
     /// <inheritdoc />
-    public partial class AddRolesToTable : Migration
+    public partial class ConfigaspnetTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -74,6 +74,21 @@ namespace Store_IBoard.DL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SendEmailSMSModels",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "VARCHAR(40)", maxLength: 40, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true),
+                    Code = table.Column<int>(type: "int", nullable: false),
+                    InsertDateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SendEmailSMSModels", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "UserClaims",
                 columns: table => new
                 {
@@ -92,13 +107,14 @@ namespace Store_IBoard.DL.Migrations
                 name: "UserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_UserLogins", x => new { x.LoginProvider, x.ProviderKey });
                 });
 
             migrationBuilder.CreateTable(
@@ -110,6 +126,7 @@ namespace Store_IBoard.DL.Migrations
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_UserRoles", x => new { x.RoleId, x.UserId });
                 });
 
             migrationBuilder.CreateTable(
@@ -148,12 +165,13 @@ namespace Store_IBoard.DL.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_UserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                 });
 
             migrationBuilder.CreateTable(
@@ -255,6 +273,16 @@ namespace Store_IBoard.DL.Migrations
                 name: "IX_GroupGoods_CategoryRef",
                 table: "GroupGoods",
                 column: "CategoryRef");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SendEmailSMSModel_Email",
+                table: "SendEmailSMSModels",
+                column: "Email");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SendEmailSMSModel_PhoneNumber",
+                table: "SendEmailSMSModels",
+                column: "PhoneNumber");
         }
 
         /// <inheritdoc />
@@ -268,6 +296,9 @@ namespace Store_IBoard.DL.Migrations
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "SendEmailSMSModels");
 
             migrationBuilder.DropTable(
                 name: "UserClaims");

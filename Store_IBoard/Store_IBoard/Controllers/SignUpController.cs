@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Store_IBoard.BL.ApplicationBusiness.SignUp;
 using Store_IBoard.BL.DTO.INPUT.SignUp;
-using Store_IBoard.BL.Services.SignUp;
+using Store_IBoard.Utlities.Attributes;
 using System.Globalization;
 
 namespace Store_IBoard.Controllers

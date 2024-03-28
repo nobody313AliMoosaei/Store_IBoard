@@ -41,5 +41,33 @@ namespace Store_IBoard.DL.ToolsBLU
                 , persianCalendar.GetDayOfMonth(Value.Value), persianCalendar.GetHour(Value.Value),
                 persianCalendar.GetMinute(Value.Value), persianCalendar.GetSecond(Value.Value));
         }
+
+        public static long Val64(this string? Value)
+        {
+            long num = -3333;
+            long.TryParse(Value, out num);
+            return num;
+        }
+
+        public static double Val72(this string? Value)
+        {
+            double num = -3333;
+            double.TryParse(Value, out num);
+            return num;
+        }
+
+        public static int Val32(this string? Value)
+        {
+            int num = -3333;
+            int.TryParse(Value, out num);
+            return num;
+        }
+
+        public static byte Val16(this string? Value)
+        {
+            byte num;
+            byte.TryParse(Value, out num);
+            return num;
+        }
     }
 }

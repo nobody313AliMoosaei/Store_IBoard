@@ -10,8 +10,8 @@ namespace Store_IBoard.DL.UnitOfWork
     public class RepositoryGeneric<TEntity> where TEntity : class
     {
         private DbSet<TEntity> _dbSet;
-        private ApplicationDbContext.ApplicationDbContext _context;
-        public RepositoryGeneric(ApplicationDbContext.ApplicationDbContext context)
+        private ApplicationDbContext.ApplicationDBContext _context;
+        public RepositoryGeneric(ApplicationDbContext.ApplicationDBContext context)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();

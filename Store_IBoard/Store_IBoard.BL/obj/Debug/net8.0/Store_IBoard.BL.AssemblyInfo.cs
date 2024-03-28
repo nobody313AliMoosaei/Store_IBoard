@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Store_IBoard.BL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+a29f1260eb9a632f14e41f461e953eeb2196cb8c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+39c3622cf7bcffa411c7d25eea566844994ace5f")]
 [assembly: System.Reflection.AssemblyProductAttribute("Store_IBoard.BL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Store_IBoard.BL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
