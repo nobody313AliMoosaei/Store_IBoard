@@ -8,7 +8,7 @@ namespace Store_IBoard.BL.Services.Session
 {
     public interface ISessionService
     {
-        Task<bool> Set(string Key, string Value);
-        Task<string> Get(string Key);
+        bool SetValue(string Key, string Value);
+        Task<string> GetValue(string Key);
     }
 }

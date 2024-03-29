@@ -1,4 +1,3 @@
-using StackExchange.Redis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
@@ -8,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Store_IBoard.DL.ApplicationDbContext;
 using Store_IBoard.DL.UnitOfWork;
 using Store_IBoard.BL.ApplicationBusiness.SignUp;
+using Store_IBoard.BL.Services.Session;
+using Store_IBoard.Utlities.ExtentionHost;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,7 @@ builder.Services.AddSession(option =>
 
 #endregion
 
+/*
 #region Redis Configuration
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddMemoryCache();
@@ -40,6 +42,7 @@ if (Convert.ToBoolean(builder.Configuration["RedisConfiguration:RedisEnable"]))
     });
 }
 #endregion
+*/
 
 #region Sql server Configuration
 builder.Services.AddDbContext<ApplicationDBContext>(option =>
@@ -85,8 +88,9 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddTransient<Store_IBoard.BL.Services.JWT.IJWTTokenManager, Store_IBoard.BL.Services.JWT.JWTTokenManager>();
 builder.Services.AddTransient<ISignUpService, SignUpService>();
 builder.Services.AddSingleton<Store_IBoard.BL.Services.Eamil.IEmailService, Store_IBoard.BL.Services.Eamil.EmailService>();
-builder.Services.AddSingleton<Store_IBoard.BL.Services.Session.ISessionService, Store_IBoard.BL.Services.Session.SessionService>();
+builder.Services.AddSingleton< Store_IBoard.BL.Services.Session.ISessionService,Store_IBoard.BL.Services.Session.SessionManager>();
 builder.Services.AddTransient(typeof(RepositoryGeneric<>));
+builder.Services.AddTransient<Store_IBoard.BL.Services.General.IGeneralService, Store_IBoard.BL.Services.General.GeneralService>();
 
 #endregion
 
@@ -109,6 +113,7 @@ builder.Services.AddAuthentication(t =>
 });
 #endregion
 
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -119,10 +124,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseSession();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseSession();
+app.CacheCategoryGroup();
 
 app.MapControllers();
 
