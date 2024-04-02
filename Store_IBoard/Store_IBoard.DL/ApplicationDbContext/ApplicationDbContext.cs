@@ -30,6 +30,10 @@ namespace Store_IBoard.DL.ApplicationDbContext
 
         public virtual DbSet<SendEmailSMSModel> SendEmailSMSModels { get; set; }
 
+        public virtual DbSet<City> Cities { get; set; }
+
+        public virtual DbSet<Root> Roots { set; get; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -127,6 +131,14 @@ namespace Store_IBoard.DL.ApplicationDbContext
                 entity.Property(e => e.PhoneNumber).HasMaxLength(13);
                 entity.HasIndex(e => e.Email, "IX_SendEmailSMSModel_Email");
                 entity.HasIndex(e => e.PhoneNumber, "IX_SendEmailSMSModel_PhoneNumber");
+            });
+
+            builder.Entity<City>(entity =>
+            {
+                entity.HasKey(e => e.Key);
+                entity.HasOne(e => e.RootRefNavigation).WithMany(e => e.Cities)
+                .HasForeignKey(e => e.RootRef)
+                .HasConstraintName("FK__RootRef__City__38996AB6");
             });
 
             #region Set Data For Roles

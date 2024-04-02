@@ -43,6 +43,21 @@ namespace Store_IBoard.BL.Services.Session
             }
         }
 
+        public async Task<bool> Remove(string Key)
+        {
+            try
+            {
+                await _cacheManager.RemoveAsync(Key);
+                return true;
+            }catch
+            {
+                return false;
+            }
+        }
 
+        public Task<bool> RemoveAll()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

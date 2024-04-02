@@ -10,5 +10,7 @@ namespace Store_IBoard.BL.Services.Session
     {
         bool SetValue(string Key, string Value);
         Task<string> GetValue(string Key);
+        Task<bool> Remove(string Key);
+        Task<bool> RemoveAll();
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Store_IBoard.DL.Migrations
 {
     /// <inheritdoc />
-    public partial class ConfigaspnetTables : Migration
+    public partial class initi : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -74,6 +74,20 @@ namespace Store_IBoard.DL.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Roots",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProvinceName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProvinceID = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roots", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SendEmailSMSModels",
                 columns: table => new
                 {
@@ -135,20 +149,21 @@ namespace Store_IBoard.DL.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NationalCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    FirstName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    NationalCode = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     UserStatus = table.Column<int>(type: "int", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizePhoneNumber = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(300)", maxLength: 300, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -191,6 +206,33 @@ namespace Store_IBoard.DL.Migrations
                         column: x => x.CategoryRef,
                         principalTable: "Category",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cities",
+                columns: table => new
+                {
+                    Key = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<long>(type: "bigint", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsDomestic = table.Column<bool>(type: "bit", nullable: false),
+                    IsForeign = table.Column<bool>(type: "bit", nullable: false),
+                    Terminals = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PersianTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EnglishTitle = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Code = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    RootRef = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cities", x => x.Key);
+                    table.ForeignKey(
+                        name: "FK__RootRef__City__38996AB6",
+                        column: x => x.RootRef,
+                        principalTable: "Roots",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -255,6 +297,11 @@ namespace Store_IBoard.DL.Migrations
                 column: "PersianColorName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cities_RootRef",
+                table: "Cities",
+                column: "RootRef");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Goods_GroupGoodRef",
                 table: "Goods",
                 column: "GroupGoodRef");
@@ -283,11 +330,33 @@ namespace Store_IBoard.DL.Migrations
                 name: "IX_SendEmailSMSModel_PhoneNumber",
                 table: "SendEmailSMSModels",
                 column: "PhoneNumber");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_NationalCode",
+                table: "Users",
+                column: "NationalCode",
+                unique: true,
+                filter: "[NationalCode] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_PhoneNumber",
+                table: "Users",
+                column: "PhoneNumber",
+                unique: true,
+                filter: "[PhoneNumber] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_UserName",
+                table: "Users",
+                column: "UserName");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Cities");
+
             migrationBuilder.DropTable(
                 name: "GoodsColors");
 
@@ -314,6 +383,9 @@ namespace Store_IBoard.DL.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Roots");
 
             migrationBuilder.DropTable(
                 name: "BasColor");

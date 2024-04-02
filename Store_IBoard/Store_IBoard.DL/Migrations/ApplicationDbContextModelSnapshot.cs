@@ -166,6 +166,48 @@ namespace Store_IBoard.DL.Migrations
                     b.ToTable("Category", (string)null);
                 });
 
+            modelBuilder.Entity("Store_IBoard.DL.Entities.City", b =>
+                {
+                    b.Property<long>("Key")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Key"));
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EnglishTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Id")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDomestic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsForeign")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PersianTitle")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("RootRef")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Terminals")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Key");
+
+                    b.HasIndex("RootRef");
+
+                    b.ToTable("Cities");
+                });
+
             modelBuilder.Entity("Store_IBoard.DL.Entities.Good", b =>
                 {
                     b.Property<long>("Id")
@@ -297,6 +339,25 @@ namespace Store_IBoard.DL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Store_IBoard.DL.Entities.Root", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("ProvinceID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProvinceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roots");
+                });
+
             modelBuilder.Entity("Store_IBoard.DL.Entities.SendEmailSMSModel", b =>
                 {
                     b.Property<string>("Id")
@@ -347,13 +408,15 @@ namespace Store_IBoard.DL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -362,19 +425,26 @@ namespace Store_IBoard.DL.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NationalCode")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
+                    b.Property<string>("NormalizePhoneNumber")
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
@@ -386,14 +456,37 @@ namespace Store_IBoard.DL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
 
                     b.Property<int>("UserStatus")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex(new[] { "NationalCode" }, "IX_Users_NationalCode")
+                        .IsUnique()
+                        .HasFilter("[NationalCode] IS NOT NULL");
+
+                    b.HasIndex(new[] { "PhoneNumber" }, "IX_Users_PhoneNumber")
+                        .IsUnique()
+                        .HasFilter("[PhoneNumber] IS NOT NULL");
+
+                    b.HasIndex(new[] { "UserName" }, "IX_Users_UserName");
+
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.City", b =>
+                {
+                    b.HasOne("Store_IBoard.DL.Entities.Root", "RootRefNavigation")
+                        .WithMany("Cities")
+                        .HasForeignKey("RootRef")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__RootRef__City__38996AB6");
+
+                    b.Navigation("RootRefNavigation");
                 });
 
             modelBuilder.Entity("Store_IBoard.DL.Entities.Good", b =>
@@ -451,6 +544,11 @@ namespace Store_IBoard.DL.Migrations
             modelBuilder.Entity("Store_IBoard.DL.Entities.GroupGood", b =>
                 {
                     b.Navigation("Goods");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.Root", b =>
+                {
+                    b.Navigation("Cities");
                 });
 #pragma warning restore 612, 618
         }
