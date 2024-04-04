@@ -31,15 +31,13 @@ namespace Store_IBoard.DL.ToolsBLU
             res.LstErrors.Add(message);
         }
 
-        public static DateTime ToPersianDateTime(this DateTime? Value)
+        public static DateTime ToPersianDateTime(this DateTime Value)
         {
-            if (Value is null)
-                return DateTime.Now;
             System.Globalization.PersianCalendar persianCalendar = new System.Globalization.PersianCalendar();
             
-            return new DateTime(persianCalendar.GetYear(Value.Value), persianCalendar.GetMonth(Value.Value)
-                , persianCalendar.GetDayOfMonth(Value.Value), persianCalendar.GetHour(Value.Value),
-                persianCalendar.GetMinute(Value.Value), persianCalendar.GetSecond(Value.Value));
+            return new DateTime(persianCalendar.GetYear(Value), persianCalendar.GetMonth(Value)
+                , persianCalendar.GetDayOfMonth(Value), persianCalendar.GetHour(Value),
+                persianCalendar.GetMinute(Value), persianCalendar.GetSecond(Value));
         }
 
         public static long Val64(this string? Value)
@@ -68,6 +66,11 @@ namespace Store_IBoard.DL.ToolsBLU
             byte num;
             byte.TryParse(Value, out num);
             return num;
+        }
+        public static int RandoNumber6()
+        {
+            Random random = new Random();
+            return random.Next(100000, 999999);
         }
     }
 }

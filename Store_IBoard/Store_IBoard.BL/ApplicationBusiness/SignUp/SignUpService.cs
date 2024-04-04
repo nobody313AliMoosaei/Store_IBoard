@@ -6,12 +6,14 @@ using Store_IBoard.BL.DTO.OUTPUT.SignUp;
 using Store_IBoard.BL.Services.Eamil;
 using Store_IBoard.BL.Services.JWT;
 using Store_IBoard.BL.Services.Public;
+using Store_IBoard.BL.Services.SMS;
 using Store_IBoard.DL.ApplicationDbContext;
 using Store_IBoard.DL.Entities;
 using Store_IBoard.DL.ToolsBLU;
 using Store_IBoard.DL.UnitOfWork;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,19 +26,21 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
         private IJWTTokenManager _jwtTokenManager;
         private UserManager<Users> _userManager;
         private IEmailService _emailService;
+        private ISMS _SMS;
         private RepositoryGeneric<SendEmailSMSModel> _sendEmSMRepo;
         public SignUpService(ApplicationDBContext context,
             IJWTTokenManager jwtmanager,
             UserManager<Users> usermanager,
             IEmailService emailservice,
-            RepositoryGeneric<SendEmailSMSModel> sendEmSMRepo)
+            RepositoryGeneric<SendEmailSMSModel> sendEmSMRepo,
+            ISMS sms)
         {
             _context = context;
             _jwtTokenManager = jwtmanager;
             _userManager = usermanager;
             _emailService = emailservice;
             _sendEmSMRepo = sendEmSMRepo;
-
+            _SMS = sms;
         }
 
         public async Task<ErrorsVM> ChangePassword(ChangePasswordModelDTO NewPassword)
@@ -256,6 +260,79 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
             return res;
         }
 
+        public async Task<ErrorsVM> LoginByMobile(string Mobile)
+        {
+            ErrorsVM res = new ErrorsVM();
+            try
+            {
+                var user = await _context.Users.Where(e => e.PhoneNumber == Mobile || e.UserName == Mobile).FirstOrDefaultAsync();
+                if (user is null)
+                {
+                    res.Message = "کاربری یافت نشد";
+                    res.AddError("لطفا ثبت نام کنید");
+                }
+                else
+                {
+                    int key = ExtentionsSystem.RandoNumber6();
+
+                    var resultSMS = await _SMS.SendSMS(Mobile, $"کد ورود به IBoard : {key}", user.Id);
+                    if (!resultSMS.IsValid)
+                        res = resultSMS;
+                    else
+                        await _sendEmSMRepo.InsertEntity(new SendEmailSMSModel
+                        {
+                            Code = key,
+                            PhoneNumber = Mobile,
+                            InsertDateTime = DateTime.Now,
+                        });
+                    res.Message = "پیامک ارسال شد";
+                    res.IsValid = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Message = "خطا در اجرای عملیات";
+                res.AddError(ex.Message);
+                if (ex.InnerException is not null)
+                    res.AddError(ex.InnerException.Message);
+            }
+            return res;
+        }
+
+        public async Task<LoginModelDTO> VerifyLoginByMobile(VerifyLoginSMSDTO loginUser)
+        {
+            LoginModelDTO res = new LoginModelDTO();
+            try
+            {
+                if (!await _context.SendEmailSMSModels.Where(e => e.PhoneNumber == loginUser.Mobile && e.Code == loginUser.Code
+                && e.InsertDateTime.Value.AddMinutes(3) >= DateTime.Now).AnyAsync())
+                    res.Error.Message = "کد معتبر نمی باشد";
+                else
+                {
+                    var user = await _context.Users.Where(e => e.PhoneNumber == loginUser.Mobile || e.UserName == loginUser.Mobile)
+                        .FirstOrDefaultAsync();
+                    if (user is null)
+                        res.Error.Message = "کاربری یافت نشد";
+                    else
+                    {
+                        var Roles = await _userManager.GetRolesAsync(user);
+                        res.Token = _jwtTokenManager.GetUserToken(user.Id, user.UserName, Roles);
+                        res.UserName = user.UserName;
+                        res.FullName = user.FirstName + " " + user.LastName;
+                        res.Error.IsValid = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Error.Message = "خطا در اجرای برنامه";
+                res.Error.AddError(ex.Message);
+                if (ex.InnerException is not null)
+                    res.Error.AddError(ex.InnerException.Message);
+            }
+            return res;
+        }
+
         public async Task<ErrorsVM> Register(SignUpDTO NewUser)
         {
             var res = new ErrorsVM();
@@ -272,7 +349,7 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
                         res.Message = "کاربری با این مشخصات در سیستم ثبت شده است";
                     else
                     {
-                        string Normalize_PhoneNumber = string.Empty;
+                        string Normalize_PhoneNumber = NewUser.PhoneNumber;
                         if (NewUser.PhoneNumber.StartsWith("+98"))
                             Normalize_PhoneNumber = NewUser.PhoneNumber.Replace("+98", "0");
                         //else if (NewUser.PhoneNumber.StartsWith("98"))
@@ -289,6 +366,7 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
                             Email = NewUser.Email,
                             IsActive = true
                         };
+
                         if ((await _userManager.CreateAsync(user, NewUser.Password)).Succeeded)
                         {
                             // Add Defualt Role
@@ -314,7 +392,6 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
             }
             return res;
         }
-
 
     }
 }

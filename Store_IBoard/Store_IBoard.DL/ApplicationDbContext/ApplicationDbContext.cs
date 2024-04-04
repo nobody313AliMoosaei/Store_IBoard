@@ -34,6 +34,7 @@ namespace Store_IBoard.DL.ApplicationDbContext
 
         public virtual DbSet<Root> Roots { set; get; }
 
+        public virtual DbSet<HistorySendSMS> HistorySMS { set; get; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -45,6 +46,13 @@ namespace Store_IBoard.DL.ApplicationDbContext
             builder.Entity<IdentityUserRole<long>>(entity =>
             {
                 entity.HasKey(e => new { e.RoleId, e.UserId });
+                #region Set Role Admin
+                entity.HasData(new IdentityUserRole<long>
+                {
+                    RoleId = 1,
+                    UserId = 1
+                });
+                #endregion
             });
 
             builder.Entity<IdentityUserToken<long>>(entity =>
@@ -65,6 +73,21 @@ namespace Store_IBoard.DL.ApplicationDbContext
                 entity.Property(e => e.NationalCode).HasMaxLength(13);
                 entity.Property(e => e.UserName).HasMaxLength(300);
                 entity.Property(e => e.NormalizedUserName).HasMaxLength(300);
+
+                #region Set Admin
+                entity.HasData(new Users
+                {
+                    UserName = "Admin",
+                    Email = "ali.moosaei.big@gmail.com",
+                    Id = 1,
+                    IsActive = true,
+                    UserStatus = UserStatus.Accept,
+                    FirstName = "Ali",
+                    LastName = "Moosaei",
+                    SecurityStamp = "K7JCQNNN4ULGGODXGAHOHXHF2MHWMYZU",
+                    PasswordHash = "AQAAAAIAAYagAAAAECj4NT8lrikZFClrFPC8twPx+S1/oWchdVTHyKWMeCWBxYBGM6RQguQbnafnYrn+Lg=="
+                });
+                #endregion
 
             });
 
@@ -141,6 +164,23 @@ namespace Store_IBoard.DL.ApplicationDbContext
                 .HasConstraintName("FK__RootRef__City__38996AB6");
             });
 
+            builder.Entity<HistorySendSMS>(entity =>
+            {
+                entity.HasIndex(e => e.Mobile, "IX_HistorySendSMS_Mobile");
+
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.InsertDateTime).HasColumnType("datetime2(7)");
+                entity.Property(e => e.Ip).HasMaxLength(16);
+                entity.Property(e => e.Mobile).HasMaxLength(13);
+                entity.Property(e=>e.Message).HasMaxLength(500);
+                entity.Property(e => e.Client).HasMaxLength(500);
+
+                entity.HasOne(e => e.UserRefNavigation)
+                .WithMany(e => e.HistorySms)
+                .HasForeignKey(e => e.UserRef)
+                .HasConstraintName("FK__HistorySms__Users__UserRef");
+            });
+
             #region Set Data For Roles
             builder.Entity<Roles>().HasData(new List<Roles>
             {
@@ -174,6 +214,7 @@ namespace Store_IBoard.DL.ApplicationDbContext
                 },
             });
             #endregion
+
         }
     }
 }

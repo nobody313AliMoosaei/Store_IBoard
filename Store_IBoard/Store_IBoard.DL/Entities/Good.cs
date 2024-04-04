@@ -15,7 +15,7 @@ public partial class Good
 
     public long? GroupGoodRef { get; set; }
 
-    public virtual ICollection<GoodsColor> GoodsColors { get; set; } = new List<GoodsColor>();
+    public virtual ICollection<GoodsColor> GoodsColors { get; set; } = new HashSet<GoodsColor>();
 
     public virtual GroupGood? GroupGoodRefNavigation { get; set; }
 }

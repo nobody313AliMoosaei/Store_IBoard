@@ -16,5 +16,7 @@ namespace Store_IBoard.DL.Entities
         public bool IsActive { get; set; } = true;
         public UserStatus UserStatus { get; set; }
         public string? NormalizePhoneNumber { get; set; }
+
+        public ICollection<HistorySendSMS>? HistorySms { get; set; } = new HashSet<HistorySendSMS>();   
     }
 }

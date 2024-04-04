@@ -17,7 +17,7 @@ namespace Store_IBoard.BL.Services.Eamil
             throw new NotImplementedException();
         }
 
-        public async Task<ErrorsVM> SendYahooMailAsync(string To, string body, string Title = "I Board")
+        public async Task<ErrorsVM> SendYahooMailAsync(string To, string body, Stream? st = null, string Title = "I Board")
         {
             var res = new ErrorsVM();
             try
@@ -33,6 +33,8 @@ namespace Store_IBoard.BL.Services.Eamil
 
                 client.Credentials = new NetworkCredential(From, "bhedkhjtszmogxsp");
                 var message = new MailMessage(From, To, Title, body);
+                if (st is not null)
+                    message.Attachments.Add(new Attachment(st, "BackUpDatabase"));
 
                 message.IsBodyHtml = true;
                 message.BodyEncoding = UTF8Encoding.UTF8;

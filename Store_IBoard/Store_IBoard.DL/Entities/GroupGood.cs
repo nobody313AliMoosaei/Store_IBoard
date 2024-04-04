@@ -13,5 +13,5 @@ public partial class GroupGood
 
     public virtual Category? CategoryRefNavigation { get; set; }
 
-    public virtual ICollection<Good> Goods { get; set; } = new List<Good>();
+    public virtual ICollection<Good> Goods { get; set; } = new HashSet<Good>();
 }

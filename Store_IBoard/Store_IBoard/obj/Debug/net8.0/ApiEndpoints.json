@@ -33,6 +33,22 @@
   },
   {
     "ContainingType": "Store_IBoard.Controllers.SignUpController",
+    "Method": "LoginByMobile",
+    "RelativePath": "api/SignUp/LoginByMobile",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Mobile",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.SignUpController",
     "Method": "Register",
     "RelativePath": "api/SignUp/Register",
     "HttpMethod": "POST",
@@ -64,16 +80,47 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "Store_IBoard.Controllers.TestController",
-    "Method": "ConvertJsonToTable",
-    "RelativePath": "api/Test/ConvertJsonToTable",
+    "ContainingType": "Store_IBoard.Controllers.SignUpController",
+    "Method": "VerifyLoginByMobile",
+    "RelativePath": "api/SignUp/VerifyLoginByMobile",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "_file",
-        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "Name": "LoginModel",
+        "Type": "Store_IBoard.BL.DTO.INPUT.SignUp.VerifyLoginSMSDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.TestController",
+    "Method": "GetBackUpDatabase",
+    "RelativePath": "api/Test/GetBackUpDatabase",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.TestController",
+    "Method": "SendSMS",
+    "RelativePath": "api/Test/SendSMS",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mobile",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "message",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],

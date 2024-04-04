@@ -11,5 +11,5 @@ public partial class BasColor
     public string? HexCode { get; set; }
     public int? ColorCode { get; set; }
     
-    public virtual ICollection<GoodsColor> GoodsColors { get; set; } = new List<GoodsColor>();
+    public virtual ICollection<GoodsColor> GoodsColors { get; set; } = new HashSet<GoodsColor>();
 }

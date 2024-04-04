@@ -7,10 +7,13 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
     public interface ISignUpService
     {
         Task<LoginModelDTO> Login(LoginDTO loginUser);
+        Task<ErrorsVM> LoginByMobile(string Mobile);
+        Task<LoginModelDTO> VerifyLoginByMobile(VerifyLoginSMSDTO loginUser);
         Task<ErrorsVM> Register(SignUpDTO NewUser);
         Task<ErrorsVM> ForgetPassword(string? UserName);
         Task<ErrorsVM> ChangePassword(ChangePasswordModelDTO NewPassword);
         Task<ErrorsVM> IsAdmin(long UserId);
         Task<ErrorsVM> IsAdmin(string UserName);
+
     }
 }

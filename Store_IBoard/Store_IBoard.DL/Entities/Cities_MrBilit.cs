@@ -31,7 +31,7 @@ namespace Store_IBoard.DL.Entities
         public string? ProvinceName { get; set; }
         public int ProvinceID { get; set; }
 
-        public ICollection<City>? Cities { get; set; } = new List<City>();
+        public ICollection<City>? Cities { get; set; } = new HashSet<City>();
     }
 
 }

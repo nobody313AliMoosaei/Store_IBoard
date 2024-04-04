@@ -96,6 +96,13 @@ namespace Store_IBoard.DL.Migrations
                     b.HasKey("RoleId", "UserId");
 
                     b.ToTable("UserRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            RoleId = 1L,
+                            UserId = 1L
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<long>", b =>
@@ -282,6 +289,42 @@ namespace Store_IBoard.DL.Migrations
                     b.HasIndex("CategoryRef");
 
                     b.ToTable("GroupGoods");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.HistorySendSMS", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Client")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime?>("InsertDateTime")
+                        .HasColumnType("datetime2(7)");
+
+                    b.Property<string>("Ip")
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<string>("Message")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Mobile")
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
+                    b.Property<long?>("UserRef")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserRef");
+
+                    b.HasIndex(new[] { "Mobile" }, "IX_HistorySendSMS_Mobile");
+
+                    b.ToTable("HistorySMS");
                 });
 
             modelBuilder.Entity("Store_IBoard.DL.Entities.Roles", b =>
@@ -475,6 +518,26 @@ namespace Store_IBoard.DL.Migrations
                     b.HasIndex(new[] { "UserName" }, "IX_Users_UserName");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "73295fe7-794c-4e59-999f-2a9622d447ae",
+                            Email = "ali.moosaei.big@gmail.com",
+                            EmailConfirmed = false,
+                            FirstName = "Ali",
+                            IsActive = true,
+                            LastName = "Moosaei",
+                            LockoutEnabled = false,
+                            PasswordHash = "AQAAAAIAAYagAAAAECj4NT8lrikZFClrFPC8twPx+S1/oWchdVTHyKWMeCWBxYBGM6RQguQbnafnYrn+Lg==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "K7JCQNNN4ULGGODXGAHOHXHF2MHWMYZU",
+                            TwoFactorEnabled = false,
+                            UserName = "Admin",
+                            UserStatus = 1
+                        });
                 });
 
             modelBuilder.Entity("Store_IBoard.DL.Entities.City", b =>
@@ -526,6 +589,16 @@ namespace Store_IBoard.DL.Migrations
                     b.Navigation("CategoryRefNavigation");
                 });
 
+            modelBuilder.Entity("Store_IBoard.DL.Entities.HistorySendSMS", b =>
+                {
+                    b.HasOne("Store_IBoard.DL.Entities.Users", "UserRefNavigation")
+                        .WithMany("HistorySms")
+                        .HasForeignKey("UserRef")
+                        .HasConstraintName("FK__HistorySms__Users__UserRef");
+
+                    b.Navigation("UserRefNavigation");
+                });
+
             modelBuilder.Entity("Store_IBoard.DL.Entities.BasColor", b =>
                 {
                     b.Navigation("GoodsColors");
@@ -549,6 +622,11 @@ namespace Store_IBoard.DL.Migrations
             modelBuilder.Entity("Store_IBoard.DL.Entities.Root", b =>
                 {
                     b.Navigation("Cities");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.Users", b =>
+                {
+                    b.Navigation("HistorySms");
                 });
 #pragma warning restore 612, 618
         }

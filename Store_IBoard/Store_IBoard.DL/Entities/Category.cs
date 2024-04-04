@@ -9,5 +9,5 @@ public partial class Category
 
     public string? CategoryName { get; set; }
 
-    public virtual ICollection<GroupGood> GroupGoods { get; set; } = new List<GroupGood>();
+    public virtual ICollection<GroupGood> GroupGoods { get; set; } = new HashSet<GroupGood>();
 }

@@ -91,7 +91,8 @@ builder.Services.AddSingleton<Store_IBoard.BL.Services.Eamil.IEmailService, Stor
 builder.Services.AddSingleton< Store_IBoard.BL.Services.Session.ISessionService,Store_IBoard.BL.Services.Session.SessionManager>();
 builder.Services.AddTransient(typeof(RepositoryGeneric<>));
 builder.Services.AddTransient<Store_IBoard.BL.Services.General.IGeneralService, Store_IBoard.BL.Services.General.GeneralService>();
-
+builder.Services.AddTransient<Store_IBoard.BL.Services.BackUpDatabase.IBackUpDatabase, Store_IBoard.BL.Services.BackUpDatabase.BackUpDatabase>();
+builder.Services.AddTransient<Store_IBoard.BL.Services.SMS.ISMS, Store_IBoard.BL.Services.SMS.SMS>();
 #endregion
 
 #region JWT Authentication
