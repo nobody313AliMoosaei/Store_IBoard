@@ -90,10 +90,7 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
             }
             catch (Exception ex)
             {
-                res.Message = "خطا در اجرای برنامه";
-                res.AddError(ex.Message);
-                if (ex.InnerException is not null)
-                    res.AddError(ex.InnerException.Message);
+                res.ExceptionError(ex);
             }
             return res;
         }
@@ -136,10 +133,7 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
             }
             catch (Exception ex)
             {
-                res.Message = "خطا در اجرای عملیات";
-                res.AddError(ex.Message);
-                if (ex.InnerException is not null)
-                    res.AddError(ex.InnerException.Message);
+                res.ExceptionError(ex);
             }
             return res;
         }
@@ -172,10 +166,7 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
             }
             catch (Exception ex)
             {
-                res.Message = "خطا در اجرای برنامه";
-                res.AddError(ex.Message);
-                if (ex.InnerException is not null)
-                    res.AddError(ex.InnerException.Message);
+                res.ExceptionError(ex);
             }
             return res;
         }
@@ -212,10 +203,7 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
             }
             catch (Exception ex)
             {
-                res.Message = "خطا در اجرای برنامه";
-                res.AddError(ex.Message);
-                if (ex.InnerException is not null)
-                    res.AddError(ex.InnerException.Message);
+                res.ExceptionError(ex);
             }
             return res;
         }
@@ -252,10 +240,7 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
             }
             catch (Exception ex)
             {
-                res.Error.Message = "خطا در اجرای برنامه";
-                res.Error.LstErrors.Add(ex.Message);
-                if (ex.InnerException is not null)
-                    res.Error.LstErrors.Add(ex.InnerException.Message);
+                res.Error.ExceptionError(ex);
             }
             return res;
         }
@@ -291,10 +276,7 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
             }
             catch (Exception ex)
             {
-                res.Message = "خطا در اجرای عملیات";
-                res.AddError(ex.Message);
-                if (ex.InnerException is not null)
-                    res.AddError(ex.InnerException.Message);
+                res.ExceptionError(ex);
             }
             return res;
         }
@@ -325,10 +307,7 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
             }
             catch (Exception ex)
             {
-                res.Error.Message = "خطا در اجرای برنامه";
-                res.Error.AddError(ex.Message);
-                if (ex.InnerException is not null)
-                    res.Error.AddError(ex.InnerException.Message);
+                res.Error.ExceptionError(ex);
             }
             return res;
         }
@@ -385,10 +364,7 @@ namespace Store_IBoard.BL.ApplicationBusiness.SignUp
             }
             catch (Exception ex)
             {
-                res.Message = "خطا در اجرای برنامه";
-                res.LstErrors.Add(ex.Message);
-                if (ex.InnerException is not null)
-                    res.LstErrors.Add(ex.InnerException.Message);
+                res.ExceptionError(ex);
             }
             return res;
         }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -25,14 +26,38 @@ namespace Store_IBoard.DL.UnitOfWork
             }
         }
 
-        public async Task<TEntity> Get(string Id)
+        public async Task<List<TEntity>> Get(Expression<Func<TEntity, bool>> _where = null)
         {
-            return await _dbSet.Where(e => e.GetType().GetProperty(nameof(Id)).ToString() == Id).SingleOrDefaultAsync<TEntity>();
+            try
+            {
+                if (_where == null)
+                    _where = _where = o => true;
+                return await _dbSet.Where(_where).ToListAsync<TEntity>();
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
-        public async Task<List<TEntity>> Get()
+
+        public IQueryable<TEntity> GetQuery(Expression<Func<TEntity, bool>> _where = null)
         {
-            return await _dbSet.ToListAsync<TEntity>();
+            try
+            {
+                if (_where == null)
+                    _where = _where = o => true;
+                return _dbSet.Where(_where).AsQueryable<TEntity>();
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
+
+        //public async Task<List<TEntity>> Get()
+        //{
+        //    return await _dbSet.ToListAsync<TEntity>();
+        //}
         public async Task<bool> InsertEntity(TEntity Entity)
         {
             _dbSet.Add(Entity);
@@ -63,8 +88,8 @@ namespace Store_IBoard.DL.UnitOfWork
         }
         public async Task<bool> DeleteEntity(string Id)
         {
-            var item = await Entity.Where(e=>e.GetType().GetProperty("Id").ToString() == Id).FirstOrDefaultAsync();
-            if(item == null) return false;
+            var item = await Entity.Where(e => e.GetType().GetProperty("Id").ToString() == Id).FirstOrDefaultAsync();
+            if (item == null) return false;
             _dbSet.Remove(item);
             if ((await _context.SaveChangesAsync()) > 0)
                 return true;

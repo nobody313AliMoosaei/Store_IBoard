@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,11 +31,21 @@ namespace Store_IBoard.DL.ToolsBLU
                 res.LstErrors = new List<string>();
             res.LstErrors.Add(message);
         }
+        public static void ExceptionError(this ErrorsVM res, Exception ex)
+        {
+            if(ex is not null)
+            {
+                res.Message = "خطا در اجرای برنامه";
+                res.AddError(ex.Message);
+                if (ex.InnerException is not null)
+                    res.AddError(ex.InnerException.Message);
+            }
+        }
 
         public static DateTime ToPersianDateTime(this DateTime Value)
         {
             System.Globalization.PersianCalendar persianCalendar = new System.Globalization.PersianCalendar();
-            
+
             return new DateTime(persianCalendar.GetYear(Value), persianCalendar.GetMonth(Value)
                 , persianCalendar.GetDayOfMonth(Value), persianCalendar.GetHour(Value),
                 persianCalendar.GetMinute(Value), persianCalendar.GetSecond(Value));
@@ -72,5 +83,25 @@ namespace Store_IBoard.DL.ToolsBLU
             Random random = new Random();
             return random.Next(100000, 999999);
         }
+
+
+        public static Expression<Func<T, bool>> AndAlso<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
+        {
+            ParameterExpression param = expr1.Parameters[0];
+            if (ReferenceEquals(param, expr2.Parameters[0]))
+                return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(expr1.Body, expr2.Body), param);
+
+            return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(expr1.Body, Expression.Invoke(expr2, param)), param);
+        }
+
+        public static Expression<Func<T, bool>> OrElse<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
+        {
+            ParameterExpression param = expr1.Parameters[0];
+            if (ReferenceEquals(param, expr2.Parameters[0]))
+                return Expression.Lambda<Func<T, bool>>(Expression.OrElse(expr1.Body, expr2.Body), param);
+
+            return Expression.Lambda<Func<T, bool>>(Expression.OrElse(expr1.Body, Expression.Invoke(expr2, param)), param);
+        }
+
     }
 }

@@ -9,6 +9,7 @@ using Store_IBoard.DL.UnitOfWork;
 using Store_IBoard.BL.ApplicationBusiness.SignUp;
 using Store_IBoard.BL.Services.Session;
 using Store_IBoard.Utlities.ExtentionHost;
+using Microsoft.AspNetCore.ResponseCompression;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,18 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
+
+#region GZip
+builder.Services.Configure<GzipCompressionProviderOptions>(config =>
+{
+    config.Level = System.IO.Compression.CompressionLevel.Optimal;
+});
+builder.Services.AddResponseCompression(option =>
+{
+    option.Providers.Add<GzipCompressionProvider>();
+    option.EnableForHttps = true;
+});
+#endregion
 
 #region Session Manager
 builder.Services.AddDistributedMemoryCache();
@@ -71,7 +84,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequiredLength = 7;
     options.Password.RequireDigit = false;
     options.Password.RequireLowercase = false;
-    
+
     // User Config
     options.User.RequireUniqueEmail = false;
 
@@ -88,7 +101,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 builder.Services.AddTransient<Store_IBoard.BL.Services.JWT.IJWTTokenManager, Store_IBoard.BL.Services.JWT.JWTTokenManager>();
 builder.Services.AddTransient<ISignUpService, SignUpService>();
 builder.Services.AddSingleton<Store_IBoard.BL.Services.Eamil.IEmailService, Store_IBoard.BL.Services.Eamil.EmailService>();
-builder.Services.AddSingleton< Store_IBoard.BL.Services.Session.ISessionService,Store_IBoard.BL.Services.Session.SessionManager>();
+builder.Services.AddSingleton<Store_IBoard.BL.Services.Session.ISessionService, Store_IBoard.BL.Services.Session.SessionManager>();
 builder.Services.AddTransient(typeof(RepositoryGeneric<>));
 builder.Services.AddTransient<Store_IBoard.BL.Services.General.IGeneralService, Store_IBoard.BL.Services.General.GeneralService>();
 builder.Services.AddTransient<Store_IBoard.BL.Services.BackUpDatabase.IBackUpDatabase, Store_IBoard.BL.Services.BackUpDatabase.BackUpDatabase>();
@@ -129,6 +142,8 @@ app.UseSession();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseResponseCompression();
 
 app.CacheCategoryGroup();
 

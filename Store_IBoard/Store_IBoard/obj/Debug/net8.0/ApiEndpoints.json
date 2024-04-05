@@ -1,5 +1,104 @@
 [
   {
+    "ContainingType": "Store_IBoard.Controllers.GeneralController",
+    "Method": "FindCategory",
+    "RelativePath": "api/General/FindCategory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "CategoryName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.GeneralController",
+    "Method": "FindGoods",
+    "RelativePath": "api/General/FindGoods",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "GoodName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.GeneralController",
+    "Method": "FindGroupGood",
+    "RelativePath": "api/General/FindGroupGood",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "GroupGoodName",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.GeneralController",
+    "Method": "GetAllCategory",
+    "RelativePath": "api/General/GetAllCategory",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.GeneralController",
+    "Method": "GetAllCategoryGoods",
+    "RelativePath": "api/General/GetAllCategoryGoods",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.GeneralController",
+    "Method": "GetAllCategoryGroupGoods",
+    "RelativePath": "api/General/GetAllCategoryGroupGoods",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.GeneralController",
+    "Method": "GetAllGoods",
+    "RelativePath": "api/General/GetAllGoods",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Store_IBoard.Controllers.SignUpController",
     "Method": "ForgetPassword",
     "RelativePath": "api/SignUp/ForgetPassword",
@@ -103,6 +202,22 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.TestController",
+    "Method": "GetGenericRepo",
+    "RelativePath": "api/Test/GetGenericRepo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Id",
+        "Type": "System.Int64",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {

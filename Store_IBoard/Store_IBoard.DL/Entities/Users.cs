@@ -15,6 +15,7 @@ namespace Store_IBoard.DL.Entities
         public string? NationalCode { get; set; }
         public bool IsActive { get; set; } = true;
         public UserStatus UserStatus { get; set; }
+        public AccessLevel AccessLevel { get; set; } = AccessLevel.None;
         public string? NormalizePhoneNumber { get; set; }
 
         public ICollection<HistorySendSMS>? HistorySms { get; set; } = new HashSet<HistorySendSMS>();   

@@ -56,10 +56,7 @@ namespace Store_IBoard.BL.Services.SMS
                     res.Message = "پیامک ارسال نشد";
             }catch (Exception ex)
             {
-                res.Message = "خطا در اجرای برنامه";
-                res.AddError(ex.Message);
-                if (ex.InnerException is not null)
-                    res.AddError(ex.InnerException.Message);
+                res.ExceptionError(ex);
             }
             return res;
         }

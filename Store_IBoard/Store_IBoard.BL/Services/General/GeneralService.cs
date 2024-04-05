@@ -170,13 +170,15 @@ namespace Store_IBoard.BL.Services.General
             }
         }
 
-        public async Task<object> GetAllGoods()
+        public async Task<object> GetAllGoods(int PageNumber, int PageSize)
         {
             try
             {
                 return await _context.Goods
                     .Include(e => e.GoodsColors)
                     .ThenInclude(e => e.ColorRefNavigation)
+                    .Skip((PageNumber - 1) * PageSize)
+                    .Take(PageSize)
                     .Select(e => new
                     {
                         e.Id,

@@ -114,12 +114,15 @@ namespace Store_IBoard.DL.ApplicationDbContext
             builder.Entity<Good>(entity =>
             {
                 entity.HasKey(e => e.Id).HasName("PK__Goods__3214EC07B9ED6410");
+                entity.HasIndex(e => e.GoodCode, "IX__Goods__GoodCode").IsUnique(true);
 
                 entity.Property(e => e.GoodName).HasMaxLength(650);
+                entity.Property(e => e.GoodCode).HasMaxLength(150);
 
                 entity.HasOne(d => d.GroupGoodRefNavigation).WithMany(p => p.Goods)
                     .HasForeignKey(d => d.GroupGoodRef)
-                    .HasConstraintName("FK__Goods__GroupGood__3C69FB99");
+                    .HasConstraintName("FK__Goods__GroupGood__3C69FB99")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<GoodsColor>(entity =>
@@ -128,11 +131,13 @@ namespace Store_IBoard.DL.ApplicationDbContext
 
                 entity.HasOne(d => d.ColorRefNavigation).WithMany(p => p.GoodsColors)
                     .HasForeignKey(d => d.ColorRef)
-                    .HasConstraintName("FK__GoodsColo__Color__412EB0B6");
+                    .HasConstraintName("FK__GoodsColo__Color__412EB0B6")
+                    .OnDelete(DeleteBehavior.Cascade);
 
                 entity.HasOne(d => d.GoodRefNavigation).WithMany(p => p.GoodsColors)
                     .HasForeignKey(d => d.GoodRef)
-                    .HasConstraintName("FK__GoodsColo__GoodR__4222D4EF");
+                    .HasConstraintName("FK__GoodsColo__GoodR__4222D4EF")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<GroupGood>(entity =>
@@ -143,7 +148,8 @@ namespace Store_IBoard.DL.ApplicationDbContext
 
                 entity.HasOne(d => d.CategoryRefNavigation).WithMany(p => p.GroupGoods)
                     .HasForeignKey(d => d.CategoryRef)
-                    .HasConstraintName("FK__GroupGood__Categ__38996AB5");
+                    .HasConstraintName("FK__GroupGood__Categ__38996AB5")
+                    .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<SendEmailSMSModel>(entity =>
@@ -161,7 +167,8 @@ namespace Store_IBoard.DL.ApplicationDbContext
                 entity.HasKey(e => e.Key);
                 entity.HasOne(e => e.RootRefNavigation).WithMany(e => e.Cities)
                 .HasForeignKey(e => e.RootRef)
-                .HasConstraintName("FK__RootRef__City__38996AB6");
+                .HasConstraintName("FK__RootRef__City__38996AB6")
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<HistorySendSMS>(entity =>
@@ -178,7 +185,8 @@ namespace Store_IBoard.DL.ApplicationDbContext
                 entity.HasOne(e => e.UserRefNavigation)
                 .WithMany(e => e.HistorySms)
                 .HasForeignKey(e => e.UserRef)
-                .HasConstraintName("FK__HistorySms__Users__UserRef");
+                .HasConstraintName("FK__HistorySms__Users__UserRef")
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             #region Set Data For Roles

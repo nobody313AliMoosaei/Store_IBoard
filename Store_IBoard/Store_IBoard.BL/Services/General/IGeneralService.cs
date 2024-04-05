@@ -11,7 +11,7 @@ namespace Store_IBoard.BL.Services.General
         Task<object> GetAllCategoryGoods();
         Task<object> GetAllCategory();
         Task<object> GetAllCategoryGroupGoods();
-        Task<object> GetAllGoods();
+        Task<object> GetAllGoods(int PageNumber, int PageSize);
         Task<object> FindGoods(string GoodName);
         Task<object> FindCategory(string CategoryName);
         Task<object> FindGroupGood(string GroupGoodName);

@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Store_IBoard.BL.ApplicationBusiness.SignUp;
 using Store_IBoard.BL.DTO.INPUT.SignUp;
-using Store_IBoard.Utlities.Attributes;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 
 namespace Store_IBoard.Controllers
 {
@@ -31,14 +28,14 @@ namespace Store_IBoard.Controllers
         public async Task<IActionResult> LoginByMobile([RegularExpression("^(\\+98|0)?9\\d{9}$")] string Mobile)
         {
             var result = await _signUpService.LoginByMobile(Mobile);
-            if(result.IsValid) return Ok(result);
+            if (result.IsValid) return Ok(result);
             return BadRequest(result);
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> VerifyLoginByMobile([FromBody] VerifyLoginSMSDTO LoginModel)
         {
             var result = await _signUpService.VerifyLoginByMobile(LoginModel);
-            if(result.Error.IsValid) return Ok(result);
+            if (result.Error.IsValid) return Ok(result);
             return BadRequest(result);
         }
 

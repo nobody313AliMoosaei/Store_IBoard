@@ -25,6 +25,7 @@ namespace Store_IBoard.DL.ToolsBLU
         None = 0,
         Level1,
         Level2,
-        Level3
+        Level3,
+        Admin
     }
 }

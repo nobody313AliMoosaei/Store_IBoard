@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Store_IBoard.DL.ToolsBLU;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,6 @@ namespace Store_IBoard.BL.Services.JWT
         public string GetUserToken(long Id, string UserName);
         public string GetUserToken(long Id, string UserName, string Role);
         public string GetUserToken(long Id, string UserName, IList<string> Roles);
+        public string GetUserToken(long Id, string UserName, IList<string> Roles, AccessLevel AccessLevel = AccessLevel.None);
     }
 }

@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Store_IBoard.BL.DTO.INPUT.SignUp;
 using Store_IBoard.BL.Services.BackUpDatabase;
 using Store_IBoard.BL.Services.Session;
 using Store_IBoard.BL.Services.SMS;
 using Store_IBoard.DL.Entities;
 using Store_IBoard.DL.ToolsBLU;
+using Store_IBoard.DL.UnitOfWork;
 using ZstdSharp.Unsafe;
 
 namespace Store_IBoard.Controllers
@@ -16,10 +19,13 @@ namespace Store_IBoard.Controllers
 
         private IBackUpDatabase _backUpDatabase;
         private ISMS _sms;
-        public TestController(IBackUpDatabase backdatabase, ISMS sms)
+        private RepositoryGeneric<Users> _userRepo;
+        public TestController(IBackUpDatabase backdatabase, ISMS sms
+            , RepositoryGeneric<Users> userRepo)
         {
             _backUpDatabase = backdatabase;
             _sms = sms;
+            _userRepo = userRepo;
         }
 
         [HttpPost("[action]")]
@@ -34,6 +40,16 @@ namespace Store_IBoard.Controllers
         {
             return Ok(await _sms.SendSMS(mobile, message));
         }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> GetGenericRepo(long Id)
+        {
+            var tt = await _userRepo.GetQuery().Select(e => e.AccessLevel).ToListAsync();
+            return Ok(tt);
+        }
+
+
+
         //    [HttpPost("[action]")]
         //    public async Task<IActionResult> ConvertJsonToTable(IFormFile _file)
         //    {

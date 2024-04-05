@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Store_IBoard.DL.ToolsBLU;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Store_IBoard.BL.Services.JWT
 {
-    public class JWTTokenManager:IJWTTokenManager
+    public class JWTTokenManager : IJWTTokenManager
     {
         private readonly IConfiguration _Configuration;
         public JWTTokenManager(IConfiguration configuration)
@@ -137,5 +138,50 @@ namespace Store_IBoard.BL.Services.JWT
             }
         }
 
+        public string GetUserToken(long Id, string UserName, IList<string> Roles, AccessLevel AccessLevel = AccessLevel.None)
+        {
+            try
+            {
+                if (Id == 0 || string.IsNullOrWhiteSpace(UserName))
+                {
+                    return null;
+                }
+
+                var Claims = new List<Claim>()
+                {
+                    new Claim(ClaimTypes.NameIdentifier, Id.ToString()),
+                    new Claim(ClaimTypes.Name, UserName),
+                    new Claim(nameof(DL.ToolsBLU.AccessLevel), AccessLevel.ToString())
+                };
+                if (Roles != null
+                    && Roles.Count > 0)
+                {
+                    foreach (var item in Roles)
+                    {
+                        Claims.Add(new Claim(ClaimTypes.Role, item));
+                    }
+                }
+
+                string Key = _Configuration["JWTConfiguration:key"];
+                var SecretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
+                var Credential = new SigningCredentials(SecretKey, SecurityAlgorithms.HmacSha256);
+
+                var Token =
+                new JwtSecurityToken(
+                    issuer: _Configuration["JWTConfiguration:issuer"],
+                    audience: _Configuration["JWTConfiguration:audience"],
+                    expires: DateTime.Now.AddDays(10),
+                    claims: Claims,
+                    signingCredentials: Credential
+                    );
+
+                string jwt_Token = new JwtSecurityTokenHandler().WriteToken(Token);
+                return jwt_Token;
+            }
+            catch
+            {
+                return null;
+            }
+        }
     }
 }

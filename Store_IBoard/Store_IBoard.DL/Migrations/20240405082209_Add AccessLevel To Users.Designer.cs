@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Store_IBoard.DL.ApplicationDbContext;
 
@@ -11,9 +12,11 @@ using Store_IBoard.DL.ApplicationDbContext;
 namespace Store_IBoard.DL.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240405082209_Add AccessLevel To Users")]
+    partial class AddAccessLevelToUsers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -223,10 +226,6 @@ namespace Store_IBoard.DL.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("GoodCode")
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
                     b.Property<string>("GoodDescription")
                         .HasColumnType("nvarchar(max)");
 
@@ -244,10 +243,6 @@ namespace Store_IBoard.DL.Migrations
                         .HasName("PK__Goods__3214EC07B9ED6410");
 
                     b.HasIndex("GroupGoodRef");
-
-                    b.HasIndex(new[] { "GoodCode" }, "IX__Goods__GoodCode")
-                        .IsUnique()
-                        .HasFilter("[GoodCode] IS NOT NULL");
 
                     b.ToTable("Goods");
                 });
@@ -536,7 +531,7 @@ namespace Store_IBoard.DL.Migrations
                             Id = 1L,
                             AccessFailedCount = 0,
                             AccessLevel = 0,
-                            ConcurrencyStamp = "bcfca4fa-b953-4173-979f-5f094751a3a1",
+                            ConcurrencyStamp = "1f0df6e0-0cae-4c90-a1b3-3adf9431a795",
                             Email = "ali.moosaei.big@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Ali",
@@ -569,7 +564,6 @@ namespace Store_IBoard.DL.Migrations
                     b.HasOne("Store_IBoard.DL.Entities.GroupGood", "GroupGoodRefNavigation")
                         .WithMany("Goods")
                         .HasForeignKey("GroupGoodRef")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("FK__Goods__GroupGood__3C69FB99");
 
                     b.Navigation("GroupGoodRefNavigation");
@@ -580,13 +574,11 @@ namespace Store_IBoard.DL.Migrations
                     b.HasOne("Store_IBoard.DL.Entities.BasColor", "ColorRefNavigation")
                         .WithMany("GoodsColors")
                         .HasForeignKey("ColorRef")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("FK__GoodsColo__Color__412EB0B6");
 
                     b.HasOne("Store_IBoard.DL.Entities.Good", "GoodRefNavigation")
                         .WithMany("GoodsColors")
                         .HasForeignKey("GoodRef")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("FK__GoodsColo__GoodR__4222D4EF");
 
                     b.Navigation("ColorRefNavigation");
@@ -599,7 +591,6 @@ namespace Store_IBoard.DL.Migrations
                     b.HasOne("Store_IBoard.DL.Entities.Category", "CategoryRefNavigation")
                         .WithMany("GroupGoods")
                         .HasForeignKey("CategoryRef")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("FK__GroupGood__Categ__38996AB5");
 
                     b.Navigation("CategoryRefNavigation");
@@ -610,7 +601,6 @@ namespace Store_IBoard.DL.Migrations
                     b.HasOne("Store_IBoard.DL.Entities.Users", "UserRefNavigation")
                         .WithMany("HistorySms")
                         .HasForeignKey("UserRef")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("FK__HistorySms__Users__UserRef");
 
                     b.Navigation("UserRefNavigation");
