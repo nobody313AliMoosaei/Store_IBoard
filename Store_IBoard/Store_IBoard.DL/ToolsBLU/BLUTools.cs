@@ -28,4 +28,9 @@ namespace Store_IBoard.DL.ToolsBLU
         Level3,
         Admin
     }
+
+    public enum BasLookupTypes
+    {
+        OrderStatus =0,
+    }
 }

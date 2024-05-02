@@ -20,12 +20,13 @@ namespace Store_IBoard.DL.Entities
         public string? PersianTitle { get; set; }
         public string? EnglishTitle { get; set; }
         public string? Code { get; set; }
-        public long RootRef { get; set; }
+        public long ProvinceRef { get; set; }
 
-        public Root? RootRefNavigation { get; set; }
+        public Province? ProvinceRefNavigation { get; set; }
+        public ICollection<Address>? Addresses { get; set; } = new HashSet<Address>();
     }
 
-    public class Root
+    public class Province
     {
         public long Id { get; set; }
         public string? ProvinceName { get; set; }

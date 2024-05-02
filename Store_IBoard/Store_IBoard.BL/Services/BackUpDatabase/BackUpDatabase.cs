@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +12,11 @@ namespace Store_IBoard.BL.Services.BackUpDatabase
     {
         private DL.ApplicationDbContext.ApplicationDBContext _context;
         private readonly BL.Services.Eamil.IEmailService _emailService;
+        
         public BackUpDatabase(DL.ApplicationDbContext.ApplicationDBContext context, Eamil.IEmailService emailService)
         {
             _context = context;
             _emailService = emailService;
-
         }
 
         async Task IBackUpDatabase.BackUpDatabase()

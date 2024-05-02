@@ -1,12 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Store_IBoard.BL.DTO.INPUT.Admin;
+using Store_IBoard.BL.DTO.OUTPUT.Admin;
 using Store_IBoard.BL.Services.Public;
 using Store_IBoard.DL.ApplicationDbContext;
 using Store_IBoard.DL.Entities;
 using Store_IBoard.DL.ToolsBLU;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +19,7 @@ namespace Store_IBoard.BL.ApplicationBusiness.Admin
     public class AdminService : IAdminService
     {
         private ApplicationDBContext _context;
+        
         public AdminService(ApplicationDBContext context)
         {
             _context = context;
@@ -202,6 +207,138 @@ namespace Store_IBoard.BL.ApplicationBusiness.Admin
             return res;
         }
 
+        public async Task<ErrorsVM> DeleteOrder(long OrderRef)
+        {
+            var res = new ErrorsVM();
+            try
+            {
+                var orders = await _context.Orders.Where(e => e.Id == OrderRef)
+                    .ToListAsync();
+                if (orders.Any())
+                {
+                    _context.RemoveRange(orders);
+                    await _context.SaveChangesAsync();
+                }
+                else
+                    res.Message = "سفارشی پیدا نشد";
+            }
+            catch (Exception ex)
+            {
+                res.ExceptionError(ex);
+            }
+            return res;
+        }
+
+        public async Task<List<GetOrdersDTO>> GetOrders(int PageNumber, int PageSize)
+        {
+            var Orders = new List<GetOrdersDTO>();
+            try
+            {
+                Orders = await _context.Orders
+                    .Include(e => e.GoodOfOrders)
+                    .ThenInclude(e => e.GoodRefNavigation)
+                    .Include(e => e.GoodOfOrders)
+                    .ThenInclude(e => e.OrderRefNavigation)
+                    .Include(e => e.StatusOrderRefNavigation)
+                    .Include(e => e.UserRefNavigation)
+                    .Skip((PageNumber - 1) * PageSize)
+                    .Take(PageSize)
+                    .Select(e => new GetOrdersDTO
+                    {
+                        OrderId = e.Id,
+                        OrderKey = e.OrderKey,
+                        OrderSerial = e.OrderSerial,
+                        CreateDateTime = e.CreateDateTime,
+                        CountUpdate = e.CountUpdate,
+                        Status = e.StatusOrderRef,
+                        StatusDsr = (e.StatusOrderRefNavigation == null) ? "" : e.StatusOrderRefNavigation.Title,
+                        UserInfo = e.UserRefNavigation == null
+                        ? new UserModelDTO()
+                        : new UserModelDTO
+                        {
+                            FirstName = e.UserRefNavigation.FirstName,
+                            LastName = e.UserRefNavigation.LastName,
+                            NationalCode = e.UserRefNavigation.NationalCode,
+                            PhoneNumber = e.UserRefNavigation.PhoneNumber,
+                            UserName = e.UserRefNavigation.UserName
+                        },
+                        GoodOfOrders = e.GoodOfOrders.Select(o => new GoodModelDTO
+                        {
+                            GoodCode = o.GoodRefNavigation.GoodCode,
+                            GoodCount = o.GoodRefNavigation.GoodCode,
+                            GoodDescription = o.GoodRefNavigation.GoodDescription,
+                            GoodName = o.GoodRefNavigation.GoodName
+                        }).ToList(),
+                    }).ToListAsync();
+            }
+            catch
+            {
+            }
+            return Orders;
+        }
+
+        public async Task<List<GetOrdersDTO>> SearchOrders(SearchOrders FilterOrder)
+        {
+            var Orders = new List<GetOrdersDTO>();
+            try
+            {
+                Expression<Func<Order, bool>> _where = o => true;
+
+                if (!FilterOrder.NationalCode.IsNullOrEmpty())
+                    _where = _where.AndAlso(e => e.UserRefNavigation.NationalCode == FilterOrder.NationalCode);
+                if (!FilterOrder.FullName.IsNullOrEmpty())
+                    _where = _where.AndAlso(e => (e.UserRefNavigation.FirstName + e.UserRefNavigation.LastName).Replace(" ", "") == FilterOrder.FullName.Replace(" ", ""));
+                if (!FilterOrder.PhoneNumber.IsNullOrEmpty())
+                    _where = _where.AndAlso(e => e.UserRefNavigation.PhoneNumber == FilterOrder.PhoneNumber);
+                if (!FilterOrder.OrderSerial.IsNullOrEmpty())
+                    _where = _where.AndAlso(e => e.OrderSerial == FilterOrder.OrderSerial.Val64());
+                if (!FilterOrder.OrderKey.IsNullOrEmpty())
+                    _where = _where.AndAlso(e => e.OrderKey == FilterOrder.OrderKey);
+                Orders = await _context.Orders.Where(_where)
+                    .Include(e => e.GoodOfOrders)
+                    .ThenInclude(e => e.GoodRefNavigation)
+                    .Include(e => e.GoodOfOrders)
+                    .ThenInclude(e => e.OrderRefNavigation)
+                    .Include(e => e.StatusOrderRefNavigation)
+                    .Include(e => e.UserRefNavigation)
+                    .Skip((FilterOrder.Pageging.PageNumber - 1) * FilterOrder.Pageging.PageSize)
+                    .Take(FilterOrder.Pageging.PageSize)
+                    .Select(e => new GetOrdersDTO
+                    {
+                        OrderId = e.Id,
+                        OrderKey = e.OrderKey,
+                        OrderSerial = e.OrderSerial,
+                        CreateDateTime = e.CreateDateTime,
+                        CountUpdate = e.CountUpdate,
+                        Status = e.StatusOrderRef,
+                        StatusDsr = (e.StatusOrderRefNavigation == null) ? "" : e.StatusOrderRefNavigation.Title,
+                        UserInfo = e.UserRefNavigation == null
+                        ? new UserModelDTO()
+                        : new UserModelDTO
+                        {
+                            FirstName = e.UserRefNavigation.FirstName,
+                            LastName = e.UserRefNavigation.LastName,
+                            NationalCode = e.UserRefNavigation.NationalCode,
+                            PhoneNumber = e.UserRefNavigation.PhoneNumber,
+                            UserName = e.UserRefNavigation.UserName
+                        },
+                        GoodOfOrders = e.GoodOfOrders.Select(o => new GoodModelDTO
+                        {
+                            GoodCode = o.GoodRefNavigation.GoodCode,
+                            GoodCount = o.GoodRefNavigation.GoodCode,
+                            GoodDescription = o.GoodRefNavigation.GoodDescription,
+                            GoodName = o.GoodRefNavigation.GoodName
+                        }).ToList(),
+                    }).ToListAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+            }
+            return Orders;
+        }
+
         public async Task<ErrorsVM> UpdateCategory(long Id, string NewName)
         {
             var res = new ErrorsVM();
@@ -258,12 +395,12 @@ namespace Store_IBoard.BL.ApplicationBusiness.Admin
             var res = new ErrorsVM();
             try
             {
-                var gg = await _context.GroupGoods.Where(e=>e.Id==Id).FirstOrDefaultAsync();
+                var gg = await _context.GroupGoods.Where(e => e.Id == Id).FirstOrDefaultAsync();
                 if (gg is not null)
                 {
                     gg.GroupName = GGData.GGname.IsNullOrEmpty() ? gg.GroupName : GGData.GGname;
-                    var category = await _context.Categories.Where(e=>e.Id == GGData.CategoryRef).FirstOrDefaultAsync();
-                    if(category is not null)
+                    var category = await _context.Categories.Where(e => e.Id == GGData.CategoryRef).FirstOrDefaultAsync();
+                    if (category is not null)
                     {
                         gg.CategoryRefNavigation = category;
                         gg.CategoryRef = category.Id;
@@ -275,6 +412,31 @@ namespace Store_IBoard.BL.ApplicationBusiness.Admin
                 }
                 else
                     res.Message = "گروه دسته بندی یافت نشد";
+            }
+            catch (Exception ex)
+            {
+                res.ExceptionError(ex);
+            }
+            return res;
+        }
+
+        public async Task<ErrorsVM> UpdateStatusOrder(long OrderRef, int NewStatus)
+        {
+            var res = new ErrorsVM();
+            try
+            {
+                var order = await _context.Orders
+                    .Where(e => e.Id == OrderRef)
+                    .FirstOrDefaultAsync();
+                if (order is null)
+                    res.Message = "سفارش پیدا نشد";
+                else
+                {
+                    _context.Orders.Remove(order);
+                    await _context.SaveChangesAsync();
+                    res.Message = "سفارش با موفقیت حذف شد";
+                    res.IsValid = true;
+                }
             }
             catch (Exception ex)
             {

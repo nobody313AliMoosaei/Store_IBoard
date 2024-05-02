@@ -1,4 +1,5 @@
 ﻿using Store_IBoard.BL.DTO.INPUT.Admin;
+using Store_IBoard.BL.DTO.OUTPUT.Admin;
 using Store_IBoard.BL.Services.Public;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,14 @@ namespace Store_IBoard.BL.ApplicationBusiness.Admin
         Task<ErrorsVM> AddNewGoods(AddNewGoodsDTO NewGood);
         Task<ErrorsVM> UpdateGoods(long Id, AddNewGoodsDTO NewGood);
         Task<ErrorsVM> DeleteGoods(long Id);
+        #endregion
+
+
+        #region Order Management
+        Task<ErrorsVM> UpdateStatusOrder(long OrderRef, int NewStatus);
+        Task<List<GetOrdersDTO>> GetOrders(int PageNumber, int PageSize);
+        Task<List<GetOrdersDTO>> SearchOrders(SearchOrders FilterOrder);
+        Task<ErrorsVM> DeleteOrder(long OrderRef);
         #endregion
     }
 

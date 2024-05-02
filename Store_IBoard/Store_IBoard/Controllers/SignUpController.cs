@@ -10,6 +10,7 @@ namespace Store_IBoard.Controllers
     public class SignUpController : ControllerBase
     {
         private ISignUpService _signUpService;
+        
         public SignUpController(ISignUpService signupservice)
         {
             _signUpService = signupservice;
@@ -61,6 +62,16 @@ namespace Store_IBoard.Controllers
             var Result = await _signUpService.ChangePassword(Date);
             if (Result.IsValid) return Ok(Result);
             return BadRequest(Result);
+        }
+        [HttpPost("[action]")]
+        //[ResponseCache(CacheProfileName = nameof(CheckLoginUser),Duration = 3600,Location = ResponseCacheLocation.Client)]
+        public async Task<IActionResult> CheckLoginUser()
+        {
+            var AuthData = this.HttpContext.Request.Headers.Where(e => e.Key == "Authorization" && !string.IsNullOrEmpty(e.Value))
+                .ToList();
+            if (AuthData.Count > 0)
+                return Ok("ok");
+            return Unauthorized("Not Ok");
         }
 
     }

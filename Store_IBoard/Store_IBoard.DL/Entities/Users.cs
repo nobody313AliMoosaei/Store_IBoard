@@ -18,6 +18,9 @@ namespace Store_IBoard.DL.Entities
         public AccessLevel AccessLevel { get; set; } = AccessLevel.None;
         public string? NormalizePhoneNumber { get; set; }
 
-        public ICollection<HistorySendSMS>? HistorySms { get; set; } = new HashSet<HistorySendSMS>();   
+        public ICollection<HistorySendSMS>? HistorySms { get; set; } = new HashSet<HistorySendSMS>();
+        public ICollection<Address> Addresses { get; set; } = new HashSet<Address>();
+        public ICollection<Order> Orders { get; set; } = new HashSet<Order>();
+        public ICollection<OrderHistory> OrderHistories { get; set; } = new HashSet<OrderHistory>();
     }
 }

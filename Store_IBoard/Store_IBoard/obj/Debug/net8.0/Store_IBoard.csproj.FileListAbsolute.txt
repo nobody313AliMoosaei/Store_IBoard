@@ -161,3 +161,5 @@ E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\obj\Debug\net8.0\Store_
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\obj\Debug\net8.0\ref\Store_IBoard.dll
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\bin\Debug\net8.0\Newtonsoft.Json.dll
 E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\bin\Debug\net8.0\RestSharp.dll
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\bin\Debug\net8.0\Dapper.dll
+E:\Project\GitHub\Store_IBoard\Store_IBoard\Store_IBoard\bin\Debug\net8.0\SettingConfiguration.json

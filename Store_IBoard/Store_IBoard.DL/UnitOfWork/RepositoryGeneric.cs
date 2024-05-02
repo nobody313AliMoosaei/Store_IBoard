@@ -5,6 +5,9 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace Store_IBoard.DL.UnitOfWork
 {
@@ -34,7 +37,7 @@ namespace Store_IBoard.DL.UnitOfWork
                     _where = _where = o => true;
                 return await _dbSet.Where(_where).ToListAsync<TEntity>();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return null;
             }
@@ -86,6 +89,7 @@ namespace Store_IBoard.DL.UnitOfWork
                 return true;
             return false;
         }
+
         public async Task<bool> DeleteEntity(string Id)
         {
             var item = await Entity.Where(e => e.GetType().GetProperty("Id").ToString() == Id).FirstOrDefaultAsync();
@@ -95,5 +99,6 @@ namespace Store_IBoard.DL.UnitOfWork
                 return true;
             return false;
         }
+
     }
 }

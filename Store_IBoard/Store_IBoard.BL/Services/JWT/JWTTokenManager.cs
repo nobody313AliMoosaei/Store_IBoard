@@ -36,13 +36,13 @@ namespace Store_IBoard.BL.Services.JWT
 
                 string Key = _Configuration["JWTConfiguration:key"];
                 var SecretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
-                var Credential = new SigningCredentials(SecretKey, SecurityAlgorithms.HmacSha256);
+                var Credential = new SigningCredentials(SecretKey, SecurityAlgorithms.RsaSsaPssSha512Signature);
 
                 var Token =
                 new JwtSecurityToken(
                     issuer: _Configuration["JWTConfiguration:issuer"],
                     audience: _Configuration["JWTConfiguration:audience"],
-                    expires: DateTime.Now.AddDays(10),
+                    expires: DateTime.Now.AddHours(1),
                     claims: Claims,
                     signingCredentials: Credential
                     );
@@ -80,7 +80,7 @@ namespace Store_IBoard.BL.Services.JWT
                 new JwtSecurityToken(
                     issuer: _Configuration["JWTConfiguration:issuer"],
                     audience: _Configuration["JWTConfiguration:audience"],
-                    expires: DateTime.Now.AddDays(10),
+                    expires: DateTime.Now.AddHours(1),
                     claims: Claims,
                     signingCredentials: Credential
                     );
@@ -120,16 +120,16 @@ namespace Store_IBoard.BL.Services.JWT
                 var SecretKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
                 var Credential = new SigningCredentials(SecretKey, SecurityAlgorithms.HmacSha256);
 
-                var Token =
-                new JwtSecurityToken(
+                var Token = new JwtSecurityToken(
                     issuer: _Configuration["JWTConfiguration:issuer"],
                     audience: _Configuration["JWTConfiguration:audience"],
-                    expires: DateTime.Now.AddDays(10),
+                    expires: DateTime.Now.AddHours(1),
                     claims: Claims,
                     signingCredentials: Credential
                     );
 
                 string jwt_Token = new JwtSecurityTokenHandler().WriteToken(Token);
+                jwt_Token = Convert.ToBase64String(Encoding.UTF8.GetBytes(jwt_Token));
                 return jwt_Token;
             }
             catch
@@ -170,7 +170,7 @@ namespace Store_IBoard.BL.Services.JWT
                 new JwtSecurityToken(
                     issuer: _Configuration["JWTConfiguration:issuer"],
                     audience: _Configuration["JWTConfiguration:audience"],
-                    expires: DateTime.Now.AddDays(10),
+                    expires: DateTime.Now.AddHours(1),
                     claims: Claims,
                     signingCredentials: Credential
                     );

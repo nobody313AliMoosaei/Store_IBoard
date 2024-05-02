@@ -222,6 +222,16 @@
   },
   {
     "ContainingType": "Store_IBoard.Controllers.TestController",
+    "Method": "GetTestQuery",
+    "RelativePath": "api/Test/GetTestQuery",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Store_IBoard.Controllers.TestController",
     "Method": "SendSMS",
     "RelativePath": "api/Test/SendSMS",
     "HttpMethod": "POST",

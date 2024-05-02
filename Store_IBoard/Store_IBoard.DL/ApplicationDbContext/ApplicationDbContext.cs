@@ -32,9 +32,20 @@ namespace Store_IBoard.DL.ApplicationDbContext
 
         public virtual DbSet<City> Cities { get; set; }
 
-        public virtual DbSet<Root> Roots { set; get; }
+        public virtual DbSet<Province> Roots { set; get; }
 
         public virtual DbSet<HistorySendSMS> HistorySMS { set; get; }
+
+        public virtual DbSet<Address> Addresses { set; get; }
+
+        public virtual DbSet<Order> Orders { set; get; }
+
+        public virtual DbSet<GoodOfOrder> GoodOfOrders { set; get; }
+
+        public virtual DbSet<BasLookup> BasLookup { set; get; }
+
+        public virtual DbSet<OrderHistory> OrderHistories { set; get; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -123,6 +134,11 @@ namespace Store_IBoard.DL.ApplicationDbContext
                     .HasForeignKey(d => d.GroupGoodRef)
                     .HasConstraintName("FK__Goods__GroupGood__3C69FB99")
                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasMany(e => e.GoodImages).WithOne(e => e.GoodRefNavigation)
+                .HasForeignKey(e => e.GoodRef)
+                .HasConstraintName("FK__GoodImag__Good__GoodRef")
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<GoodsColor>(entity =>
@@ -165,8 +181,8 @@ namespace Store_IBoard.DL.ApplicationDbContext
             builder.Entity<City>(entity =>
             {
                 entity.HasKey(e => e.Key);
-                entity.HasOne(e => e.RootRefNavigation).WithMany(e => e.Cities)
-                .HasForeignKey(e => e.RootRef)
+                entity.HasOne(e => e.ProvinceRefNavigation).WithMany(e => e.Cities)
+                .HasForeignKey(e => e.ProvinceRef)
                 .HasConstraintName("FK__RootRef__City__38996AB6")
                 .OnDelete(DeleteBehavior.Cascade);
             });
@@ -179,7 +195,7 @@ namespace Store_IBoard.DL.ApplicationDbContext
                 entity.Property(e => e.InsertDateTime).HasColumnType("datetime2(7)");
                 entity.Property(e => e.Ip).HasMaxLength(16);
                 entity.Property(e => e.Mobile).HasMaxLength(13);
-                entity.Property(e=>e.Message).HasMaxLength(500);
+                entity.Property(e => e.Message).HasMaxLength(500);
                 entity.Property(e => e.Client).HasMaxLength(500);
 
                 entity.HasOne(e => e.UserRefNavigation)
@@ -187,6 +203,101 @@ namespace Store_IBoard.DL.ApplicationDbContext
                 .HasForeignKey(e => e.UserRef)
                 .HasConstraintName("FK__HistorySms__Users__UserRef")
                 .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<Order>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK__Orders__3214EC0794D2559C");
+
+                entity.HasIndex(e => e.OrderSerial, "IX__Orders__OrderSerial").IsUnique(true);
+                entity.HasIndex(e => e.OrderKey, "IX__Orders__OrderKey").IsUnique(true);
+
+                entity.Property(e => e.OrderKey).HasDefaultValue<string>(Guid.NewGuid().ToString());
+                entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+                entity.Property(e => e.UpdateDateTime).HasColumnType("datetime");
+
+                entity.HasOne(d => d.UserRefNavigation).WithMany(p => p.Orders)
+                    .HasForeignKey(d => d.UserRef)
+                    .HasConstraintName("FK__Orders__UserRef__02FC7413");
+
+                entity.HasOne(e => e.StatusOrderRefNavigation).WithMany(e => e.Orders)
+                .HasForeignKey(e => e.StatusOrderRef)
+                .HasConstraintName("FK__Orders__basLookup__StatusOrderRef")
+                .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            builder.Entity<GoodOfOrder>(entity =>
+            {
+                entity.HasKey(e => e.Id).HasName("PK__GoodOfOr__3214EC07C7CB92A6");
+
+                entity.ToTable("GoodOfOrder");
+
+                entity.Property(e => e.CreateDateTime).HasColumnType("datetime");
+
+                entity.HasOne(d => d.GoodRefNavigation).WithMany(p => p.GoodOfOrders)
+                    .HasForeignKey(d => d.GoodRef)
+                    .HasConstraintName("FK__GoodOfOrd__GoodR__05D8E0BE");
+
+                entity.HasOne(d => d.OrderRefNavigation).WithMany(p => p.GoodOfOrders)
+                    .HasForeignKey(d => d.OrderRef)
+                    .HasConstraintName("FK__GoodOfOrd__Order__06CD04F7");
+            });
+
+            builder.Entity<Address>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.HasIndex(e => e.PhoneNumber_Receiver, "IX__Address__PhoneNumberReceiver");
+                entity.HasIndex(e => e.PostalCode, "IX__Address__PostalCode");
+
+                entity.Property(e => e.PhoneNumber_Receiver).HasMaxLength(13);
+                entity.Property(e => e.PostalCode).HasMaxLength(10);
+
+                entity.HasOne(e => e.CityRefNavigation).WithMany(e => e.Addresses)
+                .HasForeignKey(e=>e.CityRef)
+                .HasConstraintName("FK__Addresses__City__CityRef")
+                .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e=>e.UserRefNavigation).WithMany(e=>e.Addresses)
+                .HasForeignKey(e=>e.UserRef)
+                .HasConstraintName("FK__Addresses__User__UserRef")
+                .OnDelete(DeleteBehavior.Cascade);
+
+            });
+
+            builder.Entity<BasLookup>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.HasIndex(e => e.Type, "IX__BasLookup__Type");
+
+                entity.Property(e=>e.Type).HasMaxLength(100);
+                entity.Property(e=>e.Key).HasMaxLength(40);
+
+            });
+
+            builder.Entity<OrderHistory>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                
+                entity.HasOne(e => e.UserRefNavigation)
+                .WithMany(e => e.OrderHistories)
+                .HasForeignKey(e => e.UserRef)
+                .HasConstraintName("FK__Users__OrderHistory__UserRef")
+                .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.StatusOrderRefNavigation)
+                .WithMany(e => e.OrderHistories)
+                .HasForeignKey(e => e.StatusOrderRef)
+                .HasConstraintName("FK__Baslookup__OrderHistory__StatusOrderRef")
+                .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(e => e.OrderRefNavigation)
+                .WithMany(e => e.OrderHistories)
+                .HasForeignKey(e => e.OrderRef)
+                .HasConstraintName("FK__Orders__OrderHistory__OrderRef")
+                .OnDelete(DeleteBehavior.NoAction);
+
             });
 
             #region Set Data For Roles

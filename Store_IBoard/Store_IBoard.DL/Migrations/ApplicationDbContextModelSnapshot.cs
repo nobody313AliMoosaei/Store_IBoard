@@ -124,6 +124,59 @@ namespace Store_IBoard.DL.Migrations
                     b.ToTable("UserTokens");
                 });
 
+            modelBuilder.Entity("Store_IBoard.DL.Entities.Address", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("CityRef")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("District")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName_Receiver")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName_Receiver")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber_Receiver")
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
+                    b.Property<short?>("Plaque")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("PostalAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<byte?>("Unit")
+                        .HasColumnType("tinyint");
+
+                    b.Property<long?>("UserRef")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityRef");
+
+                    b.HasIndex("UserRef");
+
+                    b.HasIndex(new[] { "PhoneNumber_Receiver" }, "IX__Address__PhoneNumberReceiver");
+
+                    b.HasIndex(new[] { "PostalCode" }, "IX__Address__PostalCode");
+
+                    b.ToTable("Addresses");
+                });
+
             modelBuilder.Entity("Store_IBoard.DL.Entities.BasColor", b =>
                 {
                     b.Property<long>("Id")
@@ -153,6 +206,35 @@ namespace Store_IBoard.DL.Migrations
                     b.HasIndex(new[] { "PersianColorName" }, "IX_BasColor_PersianName");
 
                     b.ToTable("BasColor", (string)null);
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.BasLookup", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Aux")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Key")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Type")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex(new[] { "Type" }, "IX__BasLookup__Type");
+
+                    b.ToTable("BasLookup");
                 });
 
             modelBuilder.Entity("Store_IBoard.DL.Entities.Category", b =>
@@ -199,7 +281,7 @@ namespace Store_IBoard.DL.Migrations
                     b.Property<string>("PersianTitle")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("RootRef")
+                    b.Property<long>("ProvinceRef")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Terminals")
@@ -210,7 +292,7 @@ namespace Store_IBoard.DL.Migrations
 
                     b.HasKey("Key");
 
-                    b.HasIndex("RootRef");
+                    b.HasIndex("ProvinceRef");
 
                     b.ToTable("Cities");
                 });
@@ -222,6 +304,9 @@ namespace Store_IBoard.DL.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int?>("Capacity")
+                        .HasColumnType("int");
 
                     b.Property<string>("GoodCode")
                         .HasMaxLength(150)
@@ -250,6 +335,66 @@ namespace Store_IBoard.DL.Migrations
                         .HasFilter("[GoodCode] IS NOT NULL");
 
                     b.ToTable("Goods");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.GoodImage", b =>
+                {
+                    b.Property<long?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long?>("Id"));
+
+                    b.Property<DateTime?>("CreateDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<long?>("GoodRef")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ImageAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoodRef");
+
+                    b.ToTable("GoodImage");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.GoodOfOrder", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime?>("CreateDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("GoodCount")
+                        .HasColumnType("int");
+
+                    b.Property<double?>("GoodPrice")
+                        .HasColumnType("float");
+
+                    b.Property<long?>("GoodRef")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("OrderRef")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id")
+                        .HasName("PK__GoodOfOr__3214EC07C7CB92A6");
+
+                    b.HasIndex("GoodRef");
+
+                    b.HasIndex("OrderRef");
+
+                    b.ToTable("GoodOfOrder", (string)null);
                 });
 
             modelBuilder.Entity("Store_IBoard.DL.Entities.GoodsColor", b =>
@@ -335,6 +480,108 @@ namespace Store_IBoard.DL.Migrations
                     b.ToTable("HistorySMS");
                 });
 
+            modelBuilder.Entity("Store_IBoard.DL.Entities.Order", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("CountUpdate")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("CreateDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("OrderKey")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)")
+                        .HasDefaultValue("5abd538d-c822-4626-90c8-5c76244d8b02");
+
+                    b.Property<long?>("OrderSerial")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("StatusOrderRef")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdateDateTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<long?>("UserRef")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id")
+                        .HasName("PK__Orders__3214EC0794D2559C");
+
+                    b.HasIndex("StatusOrderRef");
+
+                    b.HasIndex("UserRef");
+
+                    b.HasIndex(new[] { "OrderKey" }, "IX__Orders__OrderKey")
+                        .IsUnique()
+                        .HasFilter("[OrderKey] IS NOT NULL");
+
+                    b.HasIndex(new[] { "OrderSerial" }, "IX__Orders__OrderSerial")
+                        .IsUnique()
+                        .HasFilter("[OrderSerial] IS NOT NULL");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.OrderHistory", b =>
+                {
+                    b.Property<long?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long?>("Id"));
+
+                    b.Property<DateTime?>("CreateDateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Ip")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long?>("OrderRef")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("StatusOrderRef")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UserRef")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderRef");
+
+                    b.HasIndex("StatusOrderRef");
+
+                    b.HasIndex("UserRef");
+
+                    b.ToTable("OrderHistories");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.Province", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("ProvinceID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ProvinceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roots");
+                });
+
             modelBuilder.Entity("Store_IBoard.DL.Entities.Roles", b =>
                 {
                     b.Property<long>("Id")
@@ -388,25 +635,6 @@ namespace Store_IBoard.DL.Migrations
                             NormalizedName = "TOPLEVELUSER",
                             PersianName = "کاربر سطح سه"
                         });
-                });
-
-            modelBuilder.Entity("Store_IBoard.DL.Entities.Root", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<int>("ProvinceID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ProvinceName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roots");
                 });
 
             modelBuilder.Entity("Store_IBoard.DL.Entities.SendEmailSMSModel", b =>
@@ -536,7 +764,7 @@ namespace Store_IBoard.DL.Migrations
                             Id = 1L,
                             AccessFailedCount = 0,
                             AccessLevel = 0,
-                            ConcurrencyStamp = "bcfca4fa-b953-4173-979f-5f094751a3a1",
+                            ConcurrencyStamp = "33d67cc6-0fd8-4718-811f-b545b0630da6",
                             Email = "ali.moosaei.big@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Ali",
@@ -552,16 +780,35 @@ namespace Store_IBoard.DL.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Store_IBoard.DL.Entities.Address", b =>
+                {
+                    b.HasOne("Store_IBoard.DL.Entities.City", "CityRefNavigation")
+                        .WithMany("Addresses")
+                        .HasForeignKey("CityRef")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK__Addresses__City__CityRef");
+
+                    b.HasOne("Store_IBoard.DL.Entities.Users", "UserRefNavigation")
+                        .WithMany("Addresses")
+                        .HasForeignKey("UserRef")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK__Addresses__User__UserRef");
+
+                    b.Navigation("CityRefNavigation");
+
+                    b.Navigation("UserRefNavigation");
+                });
+
             modelBuilder.Entity("Store_IBoard.DL.Entities.City", b =>
                 {
-                    b.HasOne("Store_IBoard.DL.Entities.Root", "RootRefNavigation")
+                    b.HasOne("Store_IBoard.DL.Entities.Province", "ProvinceRefNavigation")
                         .WithMany("Cities")
-                        .HasForeignKey("RootRef")
+                        .HasForeignKey("ProvinceRef")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK__RootRef__City__38996AB6");
 
-                    b.Navigation("RootRefNavigation");
+                    b.Navigation("ProvinceRefNavigation");
                 });
 
             modelBuilder.Entity("Store_IBoard.DL.Entities.Good", b =>
@@ -573,6 +820,34 @@ namespace Store_IBoard.DL.Migrations
                         .HasConstraintName("FK__Goods__GroupGood__3C69FB99");
 
                     b.Navigation("GroupGoodRefNavigation");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.GoodImage", b =>
+                {
+                    b.HasOne("Store_IBoard.DL.Entities.Good", "GoodRefNavigation")
+                        .WithMany("GoodImages")
+                        .HasForeignKey("GoodRef")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK__GoodImag__Good__GoodRef");
+
+                    b.Navigation("GoodRefNavigation");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.GoodOfOrder", b =>
+                {
+                    b.HasOne("Store_IBoard.DL.Entities.Good", "GoodRefNavigation")
+                        .WithMany("GoodOfOrders")
+                        .HasForeignKey("GoodRef")
+                        .HasConstraintName("FK__GoodOfOrd__GoodR__05D8E0BE");
+
+                    b.HasOne("Store_IBoard.DL.Entities.Order", "OrderRefNavigation")
+                        .WithMany("GoodOfOrders")
+                        .HasForeignKey("OrderRef")
+                        .HasConstraintName("FK__GoodOfOrd__Order__06CD04F7");
+
+                    b.Navigation("GoodRefNavigation");
+
+                    b.Navigation("OrderRefNavigation");
                 });
 
             modelBuilder.Entity("Store_IBoard.DL.Entities.GoodsColor", b =>
@@ -616,9 +891,62 @@ namespace Store_IBoard.DL.Migrations
                     b.Navigation("UserRefNavigation");
                 });
 
+            modelBuilder.Entity("Store_IBoard.DL.Entities.Order", b =>
+                {
+                    b.HasOne("Store_IBoard.DL.Entities.BasLookup", "StatusOrderRefNavigation")
+                        .WithMany("Orders")
+                        .HasForeignKey("StatusOrderRef")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__Orders__basLookup__StatusOrderRef");
+
+                    b.HasOne("Store_IBoard.DL.Entities.Users", "UserRefNavigation")
+                        .WithMany("Orders")
+                        .HasForeignKey("UserRef")
+                        .HasConstraintName("FK__Orders__UserRef__02FC7413");
+
+                    b.Navigation("StatusOrderRefNavigation");
+
+                    b.Navigation("UserRefNavigation");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.OrderHistory", b =>
+                {
+                    b.HasOne("Store_IBoard.DL.Entities.Order", "OrderRefNavigation")
+                        .WithMany("OrderHistories")
+                        .HasForeignKey("OrderRef")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasConstraintName("FK__Orders__OrderHistory__OrderRef");
+
+                    b.HasOne("Store_IBoard.DL.Entities.BasLookup", "StatusOrderRefNavigation")
+                        .WithMany("OrderHistories")
+                        .HasForeignKey("StatusOrderRef")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK__Baslookup__OrderHistory__StatusOrderRef");
+
+                    b.HasOne("Store_IBoard.DL.Entities.Users", "UserRefNavigation")
+                        .WithMany("OrderHistories")
+                        .HasForeignKey("UserRef")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("FK__Users__OrderHistory__UserRef");
+
+                    b.Navigation("OrderRefNavigation");
+
+                    b.Navigation("StatusOrderRefNavigation");
+
+                    b.Navigation("UserRefNavigation");
+                });
+
             modelBuilder.Entity("Store_IBoard.DL.Entities.BasColor", b =>
                 {
                     b.Navigation("GoodsColors");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.BasLookup", b =>
+                {
+                    b.Navigation("OrderHistories");
+
+                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("Store_IBoard.DL.Entities.Category", b =>
@@ -626,8 +954,17 @@ namespace Store_IBoard.DL.Migrations
                     b.Navigation("GroupGoods");
                 });
 
+            modelBuilder.Entity("Store_IBoard.DL.Entities.City", b =>
+                {
+                    b.Navigation("Addresses");
+                });
+
             modelBuilder.Entity("Store_IBoard.DL.Entities.Good", b =>
                 {
+                    b.Navigation("GoodImages");
+
+                    b.Navigation("GoodOfOrders");
+
                     b.Navigation("GoodsColors");
                 });
 
@@ -636,14 +973,27 @@ namespace Store_IBoard.DL.Migrations
                     b.Navigation("Goods");
                 });
 
-            modelBuilder.Entity("Store_IBoard.DL.Entities.Root", b =>
+            modelBuilder.Entity("Store_IBoard.DL.Entities.Order", b =>
+                {
+                    b.Navigation("GoodOfOrders");
+
+                    b.Navigation("OrderHistories");
+                });
+
+            modelBuilder.Entity("Store_IBoard.DL.Entities.Province", b =>
                 {
                     b.Navigation("Cities");
                 });
 
             modelBuilder.Entity("Store_IBoard.DL.Entities.Users", b =>
                 {
+                    b.Navigation("Addresses");
+
                     b.Navigation("HistorySms");
+
+                    b.Navigation("OrderHistories");
+
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
